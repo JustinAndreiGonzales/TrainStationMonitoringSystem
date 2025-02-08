@@ -1,6 +1,8 @@
 from rest_framework.decorators import api_view 
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework import status
+from django.db import DatabaseError
 
 from .models import Station
 from .serializers import StationSerializer
@@ -8,8 +10,19 @@ from .serializers import StationSerializer
 # Create your views here.
 @api_view(['GET'])
 def get_all_station(request):
-    stations = Station.objects.values('id', 'name', 'is_active')
-    return Response(stations)
+    try:
+        stations = Station.objects.values('id', 'name', 'is_active')
+        return Response(stations)
+    except DatabaseError:
+        return Response(
+            {"error": "Database error occured while fetching stations."},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+    except Exception as e:
+        return Response(
+            {"error": f"An unexpected error occured: {str(e)}"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 @api_view(['GET'])
 def get_station(request, id):
