@@ -6,7 +6,7 @@ from requests.exceptions import ConnectionError
 class TestSetUp(APITestCase):
     def setUp(self):
         self.stations_url = reverse("station-list")
-        self.station_urls = [reverse("station-detail", args=[i+1]) for i in range(46)]
+        self.station_urls = [reverse("station-details", args=[i+1]) for i in range(46)]
         self.non_existend_uri = reverse("station-detail", args=[50])
 
         return super().setUp()

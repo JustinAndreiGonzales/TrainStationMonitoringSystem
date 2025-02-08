@@ -11,7 +11,7 @@ from .serializers import StationSerializer
 @api_view(['GET'])
 def get_all_station(request):
     try:
-        stations = Station.objects.values('id', 'name', 'is_active')
+        stations = Station.objects.values('id', 'stationName', 'trainLine', 'isOperating')
         return Response(stations)
     except DatabaseError:
         return Response(
