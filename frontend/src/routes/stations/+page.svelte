@@ -28,11 +28,10 @@
   </script>
 
 <br>
-{#await fetchStations() then stations}
-  {#if id}
-    {#await getStationInfo(id)}
-      <br>
-    {:then station}
+{#if id}
+  {#await getStationInfo(id)}
+    <br>
+  {:then station}
       {#if station.isOperating}
         <p class="flex justify-center inter-h1 text-3xl">Station: {station.stationName}</p>
         <p class="flex justify-center inter-body text-3xl">ETA = {station.leftETA} vs {station.rightETA}</p>
@@ -41,8 +40,10 @@
         <p class="flex justify-center inter-h1 text-3xl">Station: {station.stationName}</p>
         <p class="flex justify-center inter-body text-3xl">is not currently operating :(</p>
       {/if}
-    {/await}
-  {:else}
+  {/await}
+  
+{:else}
+  {#await fetchStations() then stations}
     <h1 class="flex justify-center inter-h1 text-3xl">Stations</h1>
 
     <br>
@@ -53,9 +54,9 @@
 
     <br>
 
-    <DropdownStations />
-  {/if}
-{:catch error}
+    <DropdownStations allStations={stations}/>
+
+  {:catch error}
     <h1 class="flex justify-center inter-h1 text-3xl">Stations</h1>
 
     <br>
@@ -63,6 +64,9 @@
     <div class="flex justify-center items-center">
         <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] h-auto rounded-lg">
     </div>
+
     <Popup message={error} />
-{/await}
+
+  {/await}
+{/if}
 

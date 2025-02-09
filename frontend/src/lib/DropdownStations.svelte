@@ -7,25 +7,9 @@
   let selectedTrainLine = "";
   let selectedStation = "";
   let selectedHref = "";
-  let allStations = [];
+  export let allStations = [];
 
-  const fetchStations = async () => {
-    try {
-      const response = await fetch("https://trenph.vercel.app/api/station/?format=json");
-      if (!response.ok) {
-        throw new Error("Failed to fetch stations.");
-      }
-      allStations = await response.json();
-
-      trainLines = [...new Set(allStations.map((station) => station.trainLine))];
-    } catch (error) {
-      console.error("Error fetching stations:", error);
-    }
-  };
-
-  onMount(() => {
-    fetchStations();
-  });
+  $: trainLines = [...new Set(allStations.map((station) => station.trainLine))];
 
   $: stations = selectedTrainLine
     ? allStations.filter((station) => station.trainLine === selectedTrainLine)
