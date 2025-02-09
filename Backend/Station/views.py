@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-from django.db import DatabaseError
+from django.db import DatabaseError, OperationalError
 
 from .models import Station
 from .serializers import StationSerializer
@@ -13,6 +13,11 @@ def get_all_station(request):
     try:
         stations = Station.objects.values('id', 'stationName', 'trainLine', 'isOperating')
         return Response(stations)
+    except OperationalError:
+        return Response(
+            {"error": "Database is currently unavailable. Please try again later."},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE
+        )
     except DatabaseError:
         return Response(
             {"error": "Database error occured while fetching stations."},
