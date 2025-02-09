@@ -1,6 +1,6 @@
 <script>
     import Button from '$lib/StandardButton.svelte';
-  </script>
+</script>
 
 <div class="flex flex-col items-center justify-center min-h-screen pb-16">
     <h1 class="flex justify-center inter-h1 text-3xl">Train Station</h1>
