@@ -1,14 +1,14 @@
 <script>
-  import { onMount } from "svelte";
-  import StationButton from "./GoToButton.svelte";
+  import GoToButton from "./GoToButton.svelte";
+
+  export let allStations = [];
 
   let trainLines = [];
   let stations = [];
   let selectedTrainLine = "";
   let selectedStation = "";
   let selectedHref = "";
-  export let allStations = [];
-
+  
   $: trainLines = [...new Set(allStations.map((station) => station.trainLine))];
 
   $: stations = selectedTrainLine
@@ -34,7 +34,7 @@
     <div class="w-25">
       <select
         id="train-lines"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="inter-body bg-gray-50 border border-gray-300 text-gray-900 text-[13px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         bind:value={selectedTrainLine}
       >
         <option value="" selected>Line</option>
@@ -47,7 +47,7 @@
     <div class="w-75">
       <select
         id="stations"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="inter-body bg-gray-50 border border-gray-300 text-gray-900 text-[13px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         bind:value={selectedStation}
         disabled={!selectedTrainLine}
       >
@@ -59,7 +59,7 @@
     </div>
 
     {#if selectedHref}
-      <StationButton href={selectedHref} />
+      <GoToButton href={selectedHref} text={"→"} />
     {/if}
   </div>
 </form>

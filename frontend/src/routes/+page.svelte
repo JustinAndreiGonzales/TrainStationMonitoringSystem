@@ -2,15 +2,21 @@
     import Button from '$lib/StandardButton.svelte';
 </script>
 
+<title>Train Station Monitoring System</title>
 <div class="flex flex-col items-center justify-center min-h-screen pb-16">
-    <h1 class="flex justify-center inter-h1 text-3xl">Train Station</h1>
-    <h1 class="flex justify-center inter-h1 text-3xl">Monitoring System</h1>
+    <div class="flex flex-row items-center justify-center space-x-5">
+        <img src="/logo.png" alt="logo.png" class="w-11" />
+        <div class="flex flex-col items-left justify-center">
+            <h1 class="flex inter-h1 text-3xl">Train Station</h1>
+            <h1 class="flex inter-h1 text-3xl">Monitoring System</h1>
+        </div>
+    </div>
 
     <br>
 
     <div class="flex justify-center space-x-4">
-        <Button src="" text="View station" href="/stations" />
-        <Button src="" text="Determine route" href="/" />
+        <Button src="/c.png" text="View station" href="/stations" />
+        <Button src="/d.png" text="Determine route" href="/" />
     </div>
 
 </div>
