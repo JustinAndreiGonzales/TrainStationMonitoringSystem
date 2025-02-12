@@ -2,15 +2,24 @@
   import DropdownStations from '$lib/DropdownStations.svelte';
   import Popup from '$lib/Popup.svelte';
   import trainMap from '$lib/images/train_map.png';
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 
   let id = '';
-  let stationLst = [];
+  let dots = '';
+  let interval;
 
   onMount(() => {
       const url = new URL(window.location.href);
       const queryParams = new URLSearchParams(url.search);
       id = queryParams.get('id') || '';
+
+      interval = setInterval(() => {
+        dots = ".".repeat((dots.length % 3) + 1);
+      }, 300);
+  });
+
+  onDestroy(() => {
+    clearInterval(interval);
   });
 
   async function fetchStations() {
@@ -25,13 +34,6 @@
     console.log(id)
     return data;
   }
-
-  $: stationLst = stationLst;
-
-  function update(lst) {
-    stationLst = lst;
-  }
-
 </script>
 
 <title>Stations | Train Station Monitoring System</title>
@@ -73,10 +75,10 @@
 
     <br>
 
-    <DropdownStations allStations={stationLst}/>
-
-    {#await fetchStations() then stations}
-      {update(stations)}
+    {#await fetchStations()}
+      <p class="text-gray-500 text-lg text-center inter-body">Loading{dots}</p>
+    {:then stations}
+      <DropdownStations allStations={stations}/>
     {:catch error}
       <Popup message={error} href={"/"} text={"✕"} />
     {/await}
