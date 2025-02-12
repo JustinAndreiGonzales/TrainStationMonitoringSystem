@@ -8,7 +8,7 @@
   <div class="fixed inset-0 backdrop-blur-[2px] z-40"></div>
 
   <div
-    class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-auto bg-red-600 text-white text-lg rounded-lg shadow-lg p-6 z-50"
+    class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 sm:w-auto bg-red-700 text-white text-lg rounded-lg shadow-lg p-8 z-50"
     role="alert"
   >
     <div class="flex flex-row items-center justify-center justify-between m-auto space-x-6">

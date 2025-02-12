@@ -35,50 +35,52 @@
 </script>
 
 <title>Stations | Train Station Monitoring System</title>
-<br>
-{#if id}
-  {#await getStationInfo(id)}
+
+<div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6">
+  {#if id}
+    {#await getStationInfo(id)}
+      <br>
+    {:then station}
+        {#if station.isOperating}
+          <p class="flex justify-center inter-h1 text-3xl">Station: {station.stationName}</p>
+          <p class="flex justify-center inter-body text-3xl">ETA = {station.leftETA} vs {station.rightETA}</p>
+          <p class="flex justify-center inter-body text-3xl">Density = {station.leftCurrentDensity} vs {station.rightCurrentDensity}</p>
+        {:else}
+          <h1 class="flex justify-center inter-h1 text-3xl">Stations</h1>
+        
+          <br>
+        
+          <div class="flex justify-center items-center">
+            <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] h-auto rounded-lg">
+          </div>
+
+          <br>
+
+          <DropdownStations allStations={[]}/>
+          <Popup message={`Error: ${station.stationName} station is currently not operational!`} href={"/stations"} text={"✕"} />
+
+        {/if}
+    {/await}
+    
+  {:else}
+    <h1 class="flex justify-center inter-h1 text-3xl">Stations</h1>
+
     <br>
-  {:then station}
-      {#if station.isOperating}
-        <p class="flex justify-center inter-h1 text-3xl">Station: {station.stationName}</p>
-        <p class="flex justify-center inter-body text-3xl">ETA = {station.leftETA} vs {station.rightETA}</p>
-        <p class="flex justify-center inter-body text-3xl">Density = {station.leftCurrentDensity} vs {station.rightCurrentDensity}</p>
-      {:else}
-        <h1 class="flex justify-center inter-h1 text-3xl">Stations</h1>
-      
-        <br>
-      
-        <div class="flex justify-center items-center">
-          <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] h-auto rounded-lg">
-        </div>
 
-        <br>
+    <div class="flex justify-center items-center">
+        <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] h-auto rounded-lg">
+    </div>
 
-        <DropdownStations allStations={[]}/>
-        <Popup message={`Error: ${station.stationName} station is currently not operational!`} href={"/stations"} text={"✕"} />
+    <br>
 
-      {/if}
-  {/await}
-  
-{:else}
-  <h1 class="flex justify-center inter-h1 text-3xl">Stations</h1>
+    <DropdownStations allStations={stationLst}/>
 
-  <br>
+    {#await fetchStations() then stations}
+      {update(stations)}
+    {:catch error}
+      <Popup message={error} href={"/"} text={"✕"} />
+    {/await}
 
-  <div class="flex justify-center items-center">
-      <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] h-auto rounded-lg">
-  </div>
-
-  <br>
-
-  <DropdownStations allStations={stationLst}/>
-
-  {#await fetchStations() then stations}
-    {update(stations)}
-  {:catch error}
-    <Popup message={error} href={"/"} text={"✕"} />
-  {/await}
-
-{/if}
+  {/if}
+</div>
 
