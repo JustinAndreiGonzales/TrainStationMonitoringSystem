@@ -52,13 +52,15 @@
         disabled={!selectedTrainLine}
       >
         <option value="" selected>Station</option>
-        {#each stations as { id, stationName }}
+        {#each stations.slice().sort((a, b) => a.id - b.id) as { id, stationName }}
           <option value="/stations?id={id}">{stationName}</option>
         {/each}
       </select>
     </div>
 
-    {#if selectedHref}
+    
+
+    {#if selectedHref && selectedStation}
       <GoToButton href={selectedHref} text={"→"} />
     {/if}
   </div>
