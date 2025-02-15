@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import sys
+from datatime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,7 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'Station',
+    'Users',
+    'Reports',
+    'Announcements',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -152,3 +157,24 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+# access_token - main token for authenticated API requests
+#   if gone 
+# refresh_token - used to create new access_token
+#   avoid frequent login
+
+AUTH_USER_MODEL = 'Users.Admin'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),  # Access token expires in 30 minutes
+    "REFRESH_TOKEN_LIFETIME": timedelta(minutes=30),  # Refresh token lasts 7 days
+    "ROTATE_REFRESH_TOKENS": True,  # Issue a new refresh token on each request
+    "BLACKLIST_AFTER_ROTATION": True,  # Blacklist old refresh tokens after issuing a new one
+}
