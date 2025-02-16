@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'Announcements',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -162,7 +163,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # refresh_token - used to create new access_token
 #   avoid frequent login
 
-AUTH_USER_MODEL = 'Users.Admin'
+AUTH_USER_MODEL = 'Users.AdminUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

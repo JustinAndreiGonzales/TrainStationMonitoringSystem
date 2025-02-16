@@ -19,12 +19,15 @@ class SignUpView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            refresh = RefreshToken.for_user(user)
             return Response({
-                "user": UserSerializer(user).data,
-                "refresh": str(refresh),
-                "access": str(refresh.access_token)
-            })
+                "message": "User created successfully",
+                "user": {
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                    "role": user.role
+                }
+            }, status=201) 
         return Response(serializer.errors, status=400)
     
 
@@ -36,7 +39,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # add custom fields if needed
         return token
     
-class CustomTokenObtainPairView(TokenObtainPairSerializer):
+class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 
