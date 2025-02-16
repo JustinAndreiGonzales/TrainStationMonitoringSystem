@@ -2,6 +2,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from django.db import OperationalError, connection
 
 from .models import Station
@@ -42,3 +44,14 @@ def check_database_status():
         return True
     except OperationalError:
         return False
+    
+
+class ProtectedView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": "You are connected!"})
+    
+
+    # in Header
+    # Authentication: Bearer <access key>

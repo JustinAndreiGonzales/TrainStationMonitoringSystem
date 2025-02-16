@@ -1,4 +1,4 @@
-from Station.views import get_all_station, get_station
+from Station.views import get_all_station, get_station, ProtectedView
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView, TokenBlacklistView
 from Users.views import SignUpView, CustomTokenObtainPairView
@@ -12,11 +12,13 @@ urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
     path('login/', CustomTokenObtainPairView.as_view(), name='login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
-    path('token/logout/', TokenBlacklistView.as_view(), name='logout')
+    path('token/logout/', TokenBlacklistView.as_view(), name='logout'),
 
     # annoucements
 
     # reports
 
     # calculator
+
+    path('test/', ProtectedView.as_view(), name='test')
 ]
