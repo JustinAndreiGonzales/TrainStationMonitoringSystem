@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import sys
-from datatime import timedelta
+import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,37 +84,34 @@ WSGI_APPLICATION = 'TrainStationMonitoringSystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+ENV = os.getenv("DJANGO_ENV", "development")
 
-DATABASES = {
-    # 'default': dj_database_url.parse("DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.iqbsmjbstzitakmfcmdo.supabase.co:5432/postgres")
-    'default' : {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.iqbsmjbstzitakmfcmdo',
-        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',
-        'PORT': '6543',
-        'PASSWORD': 'trainStation191!'
-    }
-}
-
-if 'test' in sys.argv:
+if ENV == "production":
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+        'default' : {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres.iqbsmjbstzitakmfcmdo',
+            'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',
+            'PORT': '6543',
+            'PASSWORD': 'trainStation191!'
+        }
+    }
+else: 
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / 'db.sqlite3',
         }
     }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'TrainMonitoringDB',
-#         'USER': 'postgres',
-#         'PASSWORD': 'password',
-#         'HOST': 'localhost',
+# if 'test' in sys.argv:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
 #     }
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
