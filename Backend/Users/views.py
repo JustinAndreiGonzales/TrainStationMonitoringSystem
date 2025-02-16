@@ -11,7 +11,7 @@ from .serializers import UserSerializer
 User = get_user_model()
 
 class SignUpView(generics.CreateAPIView):
-    queryset = User.objects.all()
+    #queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
@@ -19,6 +19,9 @@ class SignUpView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            user.set_password(user.password)
+            user.save()
+
             refresh = RefreshToken.for_user(user)
             return Response({
                 "user": UserSerializer(user).data,
@@ -36,7 +39,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # add custom fields if needed
         return token
     
-class CustomTokenObtainPairView(TokenObtainPairSerializer):
+class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 
