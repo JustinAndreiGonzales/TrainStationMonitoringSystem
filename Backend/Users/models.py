@@ -9,6 +9,5 @@ class Admin(AbstractUser):
     ]
 
     role = models.CharField(max_length=20, choices=ROLES, default='admin')
-    name = models.CharField(max_length=100)
 
     
