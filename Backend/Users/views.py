@@ -11,7 +11,7 @@ from .serializers import UserSerializer
 User = get_user_model()
 
 class SignUpView(generics.CreateAPIView):
-    queryset = User.objects.all()
+    #queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
