@@ -1,7 +1,9 @@
-from Station.views import get_all_station, get_station, ProtectedView
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView, TokenBlacklistView
+
+from Station.views import get_all_station, get_station, ProtectedView
 from Users.views import SignUpView, CustomTokenObtainPairView
+from Announcements.views import AnnouncementListView
 
 urlpatterns = [
     # stations
@@ -15,6 +17,8 @@ urlpatterns = [
     path('token/logout/', TokenBlacklistView.as_view(), name='logout'),
 
     # annoucements
+    path('announcements/', AnnouncementListView.as_view(), name='announcements'),
+    # GET /announcements/?limit=3&offset=0 (limit - # to get, offset - index to start)
 
     # reports
 
