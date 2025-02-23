@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'TrainStationMonitoringSystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-ENV = "production"
+ENV = "development"
 
 if ENV == "production":
     print("hello: production")

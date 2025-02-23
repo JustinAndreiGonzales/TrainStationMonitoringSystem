@@ -12,9 +12,9 @@ class TestAuthentication(APITestCase):
         self.signup_url = '/signup/'
         self.login_url = '/login/'
         self.user_data = {
-            "username": "",
+            "username": "rjcsolamo",
             "role": "admin",
-            "password": ""
+            "password": "password"
         }
         User.objects.create_user(**self.user_data)
 
@@ -43,7 +43,6 @@ class TestAuthentication(APITestCase):
     def test_signup_successful(self):
         data = {
             "username": "newuser",
-            "email": "new@example.com",
             "role": "admin",
             "password": "securepassword123"
         }
@@ -73,13 +72,13 @@ class TestAuthentication(APITestCase):
 
     # invalid password
     def test_login_invalid_password(self):
-        data = {"username": "testuser", "password": "wrongpassword"}
+        data = {"username": "newuser", "password": "wrongpassword"}
         response = self.client.post(self.login_url, data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     # no database connection
     def test_login_no_database_connection(self):
         connection.close()
-        data = {"username": "testuser", "password": "securepassword123"}
+        data = {"username": "newuser", "password": "securepassword123"}
         response = self.client.post(self.login_url, data)
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)

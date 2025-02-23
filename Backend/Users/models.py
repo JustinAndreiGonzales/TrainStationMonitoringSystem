@@ -8,6 +8,4 @@ class AdminUser(AbstractUser):
         SUPER_ADMIN = 'superAdmin', 'Super Admin'
 
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.ADMIN)
-    name = models.CharField(max_length=100, null=True, blank=True)
-
     

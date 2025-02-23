@@ -35,10 +35,10 @@ class TestAnnouncementViews(APITestCase):
         self.announcement_url = reverse('announcements')
         res = self.client.get(self.announcement_url)
 
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
         data = res.data
         self.assertEqual(data['count'], 10)
-        self.assertContains(data['next'], '/api/announcements/?limit=5&offset=10')
+        self.assertIn('/api/announcements/?limit=5&offset=5', data['next'])
         self.assertEqual(data['previous'], None)
         self.assertEqual(len(data['results']), 5)
 
@@ -60,11 +60,11 @@ class TestAnnouncementViews(APITestCase):
         self.announcement_url = reverse('announcements')
         res = self.client.get(self.announcement_url, {'limit': 5, 'offset': 5}) 
 
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
         data = res.data
         self.assertEqual(data['count'], 10)
         self.assertEqual(data['next'], None)
-        self.assertContains(data['previous'], '/api/announcements/?limit=5')
+        self.assertIn('/api/announcements/?limit=5', data['previous'])
         self.assertEqual(len(data['results']), 5)
 
         a6 = data['results'][0]
