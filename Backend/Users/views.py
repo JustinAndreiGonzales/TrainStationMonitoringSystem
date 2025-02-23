@@ -32,12 +32,17 @@ class SignUpView(generics.CreateAPIView):
     
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        token['role'] = user.role
-        # add custom fields if needed
-        return token
+    # @classmethod
+    # def get_token(cls, user):
+    #     token = super().get_token(user)
+    #     token['role'] = user.role
+    #     # add custom fields if needed
+    #     return token
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['role'] = self.user.role
+
+        return data
     
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer

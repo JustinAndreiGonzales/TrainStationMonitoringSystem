@@ -20,16 +20,6 @@ def get_all_station(request):
             {"error": "Database is currently unavailable. Please try again later."},
             status=status.HTTP_503_SERVICE_UNAVAILABLE
         )
-    # except DatabaseError:
-    #     return Response(
-    #         {"error": "Database error occured while fetching stations."},
-    #         status=status.HTTP_500_INTERNAL_SERVER_ERROR
-    #     )
-    # except Exception as e:
-    #     return Response(
-    #         {"error": f"An unexpected error occured: {str(e)}"},
-    #         status=status.HTTP_500_INTERNAL_SERVER_ERROR
-    #     )
 
 @api_view(['GET'])
 def get_station(request, id):
