@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 from django.db import connection
+from unittest.mock import patch
 
 from .models import Reports
 
@@ -87,13 +88,17 @@ class TestReportsView(APITestCase):
         self.assertEqual(r9['datetimeReported'], "2025-02-23T10:33:25Z")
 
     # No database connections
-    def test_no_db_connection(self):
-        connection.close()
+    @patch("Reports.views.check_database_status")
+    def test_no_db_connection(self, mock_check_db_status):
+        mock_check_db_status.return_value = False
+
         self.client.credentials(
             HTTP_AUTHORIZATION=f"Bearer {self.token}"
         )
         res = self.client.get(self.url)
-        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        self.assertEqual(res.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
+        self.assertEqual(res.data, {"error": "Database connection error"})
 
     # unauthenticated access
     def test_unauthenticated_access(self):

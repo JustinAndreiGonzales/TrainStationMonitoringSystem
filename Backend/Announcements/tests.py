@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 from  django.urls import reverse
 from django.db import connection
+from unittest.mock import patch
 from rest_framework import status
 
 from .models import Announcements
@@ -23,12 +24,13 @@ class TestAnnouncementViews(APITestCase):
 
 
     # No database connections
-    def test_announcement_no_db_connection(self):
-        connection.close()
+    @patch("Announcements.views.check_database_status")
+    def test_announcements_no_db_connection(self, mock_check_db_status):
+        mock_check_db_status.return_value = False
         self.announcement_url = reverse('announcements')
         res = self.client.get(self.announcement_url)
-        self.assertEqual(res.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        self.assertEqual(res.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
+        self.assertEqual(res.data, {"error": "Database connection error"})
     
     # Successful announcement retrieval
     def test_announcement_retrieval(self):
