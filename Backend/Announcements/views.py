@@ -17,17 +17,14 @@ class AnnouncementListView(ListAPIView):
     serializer_class = AnnouncementSerializer
     pagination_class = AnnouncementPagination
 
-    def list(self, request, *args, **kwargs):
+    def get_queryset(self):
         if check_database_status():
-            queryset = Announcements.objects.all().order_by('-datetimePosted')
+            return Announcements.objects.all().order_by('datetimePosted')
+        return Announcements.objects.none()
 
-            if queryset is None:
-                return Response({"error": "Database connection error"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
-        else:
-            return Response(
-                {"error": "Database connection error"},
-                status=status.HTTP_503_SERVICE_UNAVAILABLE
-            )
+    def list(self, request, *args, **kwargs):
+        if not check_database_status():
+            return Response({"error": "Database connection error"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
         return super().list(request, *args, **kwargs)
 

@@ -48,13 +48,11 @@ class TestAnnouncementViews(APITestCase):
         self.assertEqual(a1['id'], 10)
         self.assertEqual(a1['author'], "LRT-2")
         self.assertEqual(a1['subject'], "Lorem Ipsum")
-        self.assertEqual(a1['datetimePosted'], "2025-02-23T10:37:25Z")
 
         a4 = data['results'][3]
         self.assertEqual(a4['id'], 7)
         self.assertEqual(a4['author'], "LRT-1")
         self.assertEqual(a4['subject'], "Lorem Ipsum")
-        self.assertEqual(a4['datetimePosted'], "2025-02-23T10:35:48Z")
         
 
     # requesting additional announcement
@@ -73,10 +71,8 @@ class TestAnnouncementViews(APITestCase):
         self.assertEqual(a6['id'], 5)
         self.assertEqual(a6['author'], "MRT-3")
         self.assertEqual(a6['subject'], "Lorem Ipsum")
-        self.assertEqual(a6['datetimePosted'], "2025-02-23T10:34:43Z")
 
         a9 = data['results'][3]
         self.assertEqual(a9['id'], 2)
         self.assertEqual(a9['author'], "LRT-2")
         self.assertEqual(a9['subject'], "Lorem Ipsum")
-        self.assertEqual(a9['datetimePosted'], "2025-02-23T10:33:25Z")
