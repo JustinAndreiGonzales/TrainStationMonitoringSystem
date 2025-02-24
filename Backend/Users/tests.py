@@ -1,16 +1,17 @@
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from django.db import connection
-
+from django.db import connection, OperationalError
+from django.urls import reverse
+from unittest.mock import patch
 
 # Create your tests here.
 User = get_user_model()
 
 class TestAuthentication(APITestCase):
     def setUp(self):
-        self.signup_url = '/signup/'
-        self.login_url = '/login/'
+        self.signup_url = reverse('signup')
+        self.login_url = reverse('login')
         self.user_data = {
             "username": "rjcsolamo",
             "role": "admin",
@@ -50,13 +51,23 @@ class TestAuthentication(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     # no database connection
-    def test_signup_no_database_connection(self):
-        connection.close()
+    @patch("django.db.connection.ensure_connection", side_effect=OperationalError)
+    def test_signup_no_database_connection(self, mock_db):
         response = self.client.post(self.signup_url, self.user_data)
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(response.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
     # LOGIN
+    def test_login_registered_user(self):
+        data = {
+            "username": "newuser",
+            "role": "admin",
+            "password": "securepassword123"
+        }
+        response = self.client.post(self.signup_url, data)
+        data = {"username": "newuser", "password": "securepassword123"}
+        res = self.client.post(self.login_url, data)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     # non registered user
     def test_login_non_registered_user(self):
@@ -77,8 +88,8 @@ class TestAuthentication(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     # no database connection
-    def test_login_no_database_connection(self):
-        connection.close()
+    @patch("django.db.connection.ensure_connection", side_effect=OperationalError)
+    def test_login_no_database_connection(self, mock_db):
         data = {"username": "newuser", "password": "securepassword123"}
         response = self.client.post(self.login_url, data)
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(response.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
