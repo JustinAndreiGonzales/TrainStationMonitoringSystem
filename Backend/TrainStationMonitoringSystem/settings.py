@@ -85,10 +85,9 @@ WSGI_APPLICATION = 'TrainStationMonitoringSystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-ENV = "development"
+ENV = "production"
 
 if ENV == "production":
-    print("hello: production")
     DATABASES = {
         'default' : {
             'ENGINE': 'django.db.backends.postgresql',
@@ -99,8 +98,7 @@ if ENV == "production":
             'PASSWORD': 'trainStation191!'
         }
     }
-else: 
-    print("hello: development")
+else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
