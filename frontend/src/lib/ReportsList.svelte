@@ -6,6 +6,10 @@
   let current = 5;
   export let posts;
 
+  function increment() {
+    current += 5;
+  }
+
   $: current = current;
     
 </script>
@@ -29,6 +33,7 @@
   {#if current < posts.length}
   <button
     class="max-w-sm mx-auto bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded inter-body text-[13px]"
+    on:click={increment}
   >
     Load more ↓
   </button>

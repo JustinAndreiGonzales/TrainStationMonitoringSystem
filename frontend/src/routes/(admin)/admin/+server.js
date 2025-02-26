@@ -27,9 +27,8 @@ export async function POST({ request, cookies }) {
             secure: process.env.NODE_ENV === 'production',
             maxAge: 60 * 5
         });
-        
 
-        return json({ success: true });
+        return json({ success: true, token: data.access, refresh: data.refresh });
     }
 
     return json({ success: false, message: 'Invalid credentials' }, { status: 401 });
