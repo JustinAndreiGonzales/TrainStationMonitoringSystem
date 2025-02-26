@@ -9,8 +9,6 @@ async function refreshAccessToken(cookies) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ refresh: refreshToken })
         });
-
-        console.log('\n!! RAT2: ' + res.ok);
         if (!res.ok) return null;
 
         const data = await res.json();

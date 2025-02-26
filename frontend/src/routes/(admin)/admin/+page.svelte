@@ -15,8 +15,8 @@
         const result = await response.json();
 
         if (result.success) {
-            token = result.access;
-            localStorage.setItem("jwt_token", token);
+            localStorage.setItem("jwt_token", result.token);
+            localStorage.setItem("refresh_token", result.refresh);
             window.location.href = '/admin/home';
         } else {
             if (result.message != "Invalid credentials") {
