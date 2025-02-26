@@ -14,15 +14,22 @@
 
 <title>Announcements | Train Station Monitoring System</title>
 
-<div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-7">
-  <h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Announcements</h1>
-  <hr class="w-200 h-30 mx-auto bg-gray-200 border-0 rounded-sm dark:bg-gray-700">
-  {#await fetchAnnouncements()}
+{#await fetchAnnouncements()}
+  <div class="flex-col items-center scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-7 mx-20">
+    <h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Announcements</h1>
+    <hr class="w-auto max-w-200 mx-auto h-30 bg-gray-200 border-0 rounded-sm dark:bg-gray-700 ">
     <Loading />
-  {:then announcements}
-    <AnnouncementsList max={announcements.count} posts={announcements.results} />
-  {:catch error}
-    <!-- FIX: popup centering -->
-    <Popup message={error} href={"/"} text={"✕"} />
-  {/await}
-</div>
+  </div>
+{:then announcements}
+  <div class="flex-col items-center scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-7 mx-20">
+    <h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Announcements</h1>
+    <hr class="w-auto max-w-200 mx-auto h-30 bg-gray-200 border-0 rounded-sm dark:bg-gray-700 ">
+  </div>
+  <br>
+  <AnnouncementsList max={announcements.count} posts={announcements.results} />
+{:catch error}
+    <div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-7">
+      <h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Announcements</h1>
+    </div>
+    <Popup message={error} href={"/admin/home"} text={"✕"} />
+{/await}

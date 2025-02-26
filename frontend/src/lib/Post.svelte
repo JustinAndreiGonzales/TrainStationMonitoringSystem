@@ -12,7 +12,7 @@
   }
 </script>
 
-<div class="flex space-x-10 max-w-200">
+<div class="flex space-x-10 max-w-200 portrait:flex-col space-y-3">
   <div class="flex-row space-y-2">
     <div class="flex space-x-5">
       <!-- UPDATE TO IMG -->
@@ -39,3 +39,11 @@
     {/if}
   </div>
 </div>
+
+<style>
+  @media (orientation: portrait) {
+    .portrait\:flex-col {
+      flex-direction: column;
+    }
+  }
+</style>
