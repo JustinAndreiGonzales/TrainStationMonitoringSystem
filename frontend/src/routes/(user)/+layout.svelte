@@ -1,6 +1,6 @@
 <script>
     import NavBar from '$lib/NavBar.svelte';
-    import '../app.css'
+    import '$src/app.css'
   </script>
   
   <slot />
