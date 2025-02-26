@@ -11,15 +11,23 @@ export async function POST({ request, cookies }) {
         credentials: 'include'
     });
 
+    // REPLACE: maxAge (in sec)
     if (res.ok) {
         const data = await res.json();
         cookies.set('admin_auth', data.access, {
             path: '/admin',
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            // REPLACE: maxAge (in sec)
             maxAge: 60 * 5
         });
+
+        cookies.set('refresh_token', data.refresh, {
+            path: '/admin',
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 5
+        });
+        
 
         return json({ success: true });
     }

@@ -6,31 +6,27 @@
     let token = '';
   
     async function login() {
-    try {
         const response = await fetch('/admin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
         });
 
-        let result;
-        try {
-            result = await response.json();
-        } catch (jsonError) {
-            throw new Error("No database connection");
-        }
+        const result = await response.json();
 
         if (result.success) {
             token = result.access;
             localStorage.setItem("jwt_token", token);
             window.location.href = '/admin/home';
         } else {
-            loginFail = "Error: " + result.message;
+            if (result.message != "Invalid credentials") {
+                 loginFail = "Error: No database connection" + result.message;
+            }
+            else { 
+                loginFail = "Error: " + result.message;
+            }
         }
-    } catch (error) {
-        loginFail = "Error: " + error.message;
     }
-}
 
 </script>
   

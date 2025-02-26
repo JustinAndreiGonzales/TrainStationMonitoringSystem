@@ -31,10 +31,10 @@
   $: allPosts = [...allPosts, ...newPosts]
 </script>
 
-<div class="flex flex-col items-center min-h-screen space-y-7 pb-25">
+<div class="flex flex-col items-center min-h-screen space-y-7 pb-25 mx-20">
   {#each allPosts as p, i}
     {#if i > 0}
-      <hr class="w-210 h-[0.5px] bg-gray-200 border-0">
+      <hr class="w-full h-[0.5px] bg-gray-200 border-0 max-w-200">
     {/if}
 
     <Post 
