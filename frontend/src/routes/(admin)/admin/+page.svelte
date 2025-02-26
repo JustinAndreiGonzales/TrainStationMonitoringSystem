@@ -6,22 +6,32 @@
     let token = '';
   
     async function login() {
-      const response = await fetch('/admin', {
+    try {
+        const response = await fetch('/admin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
-      });
-  
-      const result = await response.json();
-  
-      if (result.success) {
-        token = result.access;
-        localStorage.setItem("jwt_token", token);
-        window.location.href = '/admin/home'; // Redirect to a protected page
-      } else {
-        loginFail = "Login failed: " + result.message;
-      }
+        });
+
+        let result;
+        try {
+            result = await response.json();
+        } catch (jsonError) {
+            throw new Error("No database connection");
+        }
+
+        if (result.success) {
+            token = result.access;
+            localStorage.setItem("jwt_token", token);
+            window.location.href = '/admin/home';
+        } else {
+            loginFail = "Error: " + result.message;
+        }
+    } catch (error) {
+        loginFail = "Error: " + error.message;
     }
+}
+
 </script>
   
 <title>Admin | Train Station Monitoring System</title>
@@ -37,11 +47,11 @@
 
         <br>
 
-        <div class="flex-col justify-center space-x-4 space-y-3">
+        <div class="flex-col justify-center align-center space-x-4 space-y-3 w-90">
             <input type="text" id="username" bind:value={username} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 inter-body" placeholder="Username" required />
             <input type="password" id="password" bind:value={password} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 inter-body toggle-password-active:hidden" placeholder="Password" required />
             <button
-                class="max-w-sm mx-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                class="max-w-sm mx-auto bg-blue-600 hover:bg-blue-700 text-white inter-body text-sm w-full py-2 px-4 rounded"
                 on:click={login}
             >
                 Login
@@ -49,7 +59,7 @@
         </div>
 
         {#if loginFail}
-            <p class="mt-4 text-red-500">{loginFail}</p>
+            <p class="mt-4 text-red-500 inter-body">{loginFail}</p>
         {/if}
     </div>
 </div>  
