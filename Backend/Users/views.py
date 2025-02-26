@@ -58,6 +58,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
     
 class CustomTokenObtainPairView(TokenObtainPairView):
+    permission_classes = [AllowAny]
     serializer_class = CustomTokenObtainPairSerializer
 
     def check_database_status(self):
