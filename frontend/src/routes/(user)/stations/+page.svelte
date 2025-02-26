@@ -1,10 +1,26 @@
 <script lang="ts">
   import DropdownStations from '$lib/DropdownStations.svelte';
-  import Loading from '$lib/Loading.svelte';
   import Popup from '$lib/Popup.svelte';
   import trainMap from '$lib/images/train_map.png';
+  import { onMount, onDestroy } from 'svelte';
 
   let id = '';
+  let dots = '';
+  let interval;
+
+  onMount(() => {
+      const url = new URL(window.location.href);
+      const queryParams = new URLSearchParams(url.search);
+      id = queryParams.get('id') || '';
+
+      interval = setInterval(() => {
+        dots = ".".repeat((dots.length % 3) + 1);
+      }, 300);
+  });
+
+  onDestroy(() => {
+    clearInterval(interval);
+  });
 
   async function fetchStations() {
       const res = await fetch('https://trenph.up.railway.app/api/station/?format=json');
@@ -60,7 +76,7 @@
     <br>
 
     {#await fetchStations()}
-      <Loading />
+      <p class="text-gray-500 text-lg text-center inter-body">Loading{dots}</p>
     {:then stations}
       <DropdownStations allStations={stations}/>
     {:catch error}
