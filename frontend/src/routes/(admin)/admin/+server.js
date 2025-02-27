@@ -41,5 +41,6 @@ export async function GET({ cookies }) {
 
 export async function DELETE({ cookies }) {
     cookies.delete('admin_auth', { path: '/admin' });
+    cookies.delete('refresh_token', { path: '/admin' });
     return json({ success: true });
 }
