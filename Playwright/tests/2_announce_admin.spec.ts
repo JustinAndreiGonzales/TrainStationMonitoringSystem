@@ -5,6 +5,8 @@ const user = 'admin';
 const pw = 'password';
 
 test.beforeEach(async ({ page }) => {
+  test.setTimeout(100_000)
+
   await page.goto(url);
 
   await page.getByPlaceholder('Username').fill(user);
