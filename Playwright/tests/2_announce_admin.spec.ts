@@ -13,10 +13,8 @@ test.beforeEach(async ({ page }) => {
   await page.getByPlaceholder('Password').fill(pw);
 
   await page.getByRole('button').click();
-  await page.waitForNavigation();
 
   await page.getByText('Announcements').click();
-  await page.waitForNavigation();
 
   await page.getByText('Load more').click();
   await page.getByText('Load more').click();

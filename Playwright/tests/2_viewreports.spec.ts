@@ -11,10 +11,8 @@ test.beforeEach(async ({ page }) => {
   await page.getByPlaceholder('Password').fill(pw);
 
   await page.getByRole('button').click();
-  await page.waitForNavigation();
 
   await page.getByText('Reports').click();
-  await page.waitForNavigation();
 });
 
 test('lrt 1 announcements', async ({ page }) => {
