@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView, TokenBlacklistView
 
-from Station.views import get_all_station, get_station, ProtectedView
+from Station.views import get_all_station, get_station, ProtectedView, get_cctv_feed
 from Users.views import SignUpView, CustomTokenObtainPairView
 from Announcements.views import AnnouncementListView
 from Reports.views import ReportsListView
@@ -10,6 +10,8 @@ urlpatterns = [
     # stations
     path('station/', get_all_station, name="station-list"),
     path('station/<int:id>/', get_station, name="station-details"),
+    # station cctv feed
+    path("station/<int:id>/cctv_feed/", get_cctv_feed, name="cctv_feed"),
 
     # admin
     path('signup/', SignUpView.as_view(), name='signup'),
