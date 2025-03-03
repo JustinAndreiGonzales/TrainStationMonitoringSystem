@@ -99,12 +99,24 @@ def generate_frames(src):
 
 
 @api_view(['GET'])
-def get_cctv_feed(request, id):
+def get_cctv_feed(request, id, platform_side):
     station = get_object_or_404(Station, id=id)
 
     # Ensure the station has a valid CCTV URL
-    if not station.cctv:
-        return StreamingHttpResponse("No CCTV available for this station.", status=404)
+    if not station.leftCCTV and not station.rightCCTV:
+        return StreamingHttpResponse("No CCTVs available for this station.", status=404)
 
-    return StreamingHttpResponse(generate_frames(station.cctv),
-                                 content_type='multipart/x-mixed-replace; boundary=frame')
+    match  platform_side:
+        case 'left':
+            if not station.leftCCTV:
+                return StreamingHttpResponse("Selected CCTV is unavailable", status=404)
+            return StreamingHttpResponse(generate_frames(station.leftCCTV),
+                                        content_type='multipart/x-mixed-replace; boundary=frame')
+        case 'right':
+            if not station.rightCCTV:
+                return StreamingHttpResponse("Selected CCTV is unavailable", status=404)
+            return StreamingHttpResponse(generate_frames(station.rightCCTV),
+                                        content_type='multipart/x-mixed-replace; boundary=frame')
+        case _:
+            return StreamingHttpResponse("Invalid URL", status=404)
+
