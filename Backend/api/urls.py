@@ -11,7 +11,7 @@ urlpatterns = [
     path('station/', get_all_station, name="station-list"),
     path('station/<int:id>/', get_station, name="station-details"),
     # station cctv feed
-    path("station/<int:id>/cctv_feed/", get_cctv_feed, name="cctv_feed"),
+    path("station/<int:id>/cctv_feed/<str:platform_side>", get_cctv_feed, name="cctv_feed"),
 
     # admin
     path('signup/', SignUpView.as_view(), name='signup'),
