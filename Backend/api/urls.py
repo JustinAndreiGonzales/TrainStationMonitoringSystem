@@ -5,6 +5,7 @@ from Station.views import get_all_station, get_station, ProtectedView, get_cctv_
 from Users.views import SignUpView, CustomTokenObtainPairView
 from Announcements.views import AnnouncementListView
 from Reports.views import ReportsListView, ReportSumbitView
+from RouteFinding.views import route_finding
 
 urlpatterns = [
     # stations
@@ -26,9 +27,10 @@ urlpatterns = [
     # reports
     path('reports/', ReportsListView.as_view(), name='reports'),
     # GET /reports/?limit=3&offset=0 (limit - # to get, offset - index to start)
-    path('reports/create/', ReportSumbitView.as_view(), name='report-submission')
+    path('reports/create/', ReportSumbitView.as_view(), name='report-submission'),
 
     # calculator
+    path('/route/<str:src>/<str:dest/', route_finding, name='route_finding'),
 
     path('test/', ProtectedView.as_view(), name='test')
 ]
