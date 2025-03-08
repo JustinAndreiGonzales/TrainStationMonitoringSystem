@@ -55,6 +55,16 @@ def _find_route(given_layout: Layout, src: str, dst: str) -> Route:
                 ...
             except KeyError:
                 return Route([],[])
+
+
+lrt1 = TrainLine({"lrt2": ("Doroteo Jose","Recto"), "mrt3": ("Doroteo Jose","Recto")},lrt1_fare_matrix)
+lrt2 = TrainLine({"lrt1": ("Recto","Doroteo Jose"), "mrt3": ("Cubao2","Cubao3")},lrt2_fare_matrix)
+mrt3 = TrainLine({"lrt1":  ("Cubao3","Cubao2"), "lrt2": ("Cubao3","Cubao2")},mrt3_fare_matrix)
+
+standard_layout = Layout({"lrt1":lrt1,"lrt2":lrt2,"mrt3":mrt3})
+        
+def find_route(src: str, dst: str) -> Route:
+    return _find_route(standard_layout,src,dst)
         
 
 #connection needs to know the 2 stations that are connected to one another, and the lines they connect to
