@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenBlacklistView
 from Station.views import get_all_station, get_station, ProtectedView, get_cctv_feed
 from Users.views import SignUpView, CustomTokenObtainPairView
 from Announcements.views import AnnouncementListView
-from Reports.views import ReportsListView
+from Reports.views import ReportsListView, ReportSumbitView
 
 urlpatterns = [
     # stations
@@ -26,6 +26,7 @@ urlpatterns = [
     # reports
     path('reports/', ReportsListView.as_view(), name='reports'),
     # GET /reports/?limit=3&offset=0 (limit - # to get, offset - index to start)
+    path('reports/create/', ReportSumbitView.as_view(), name='report-submission')
 
     # calculator
 

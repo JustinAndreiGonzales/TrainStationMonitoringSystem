@@ -1,4 +1,5 @@
 from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 from django.db import connection, OperationalError
@@ -36,3 +37,17 @@ def check_database_status():
         return True
     except OperationalError:
         return False
+    
+class ReportSumbitView(APIView):
+    def post(self, request):
+        if not check_database_status():
+            return Response(
+                {"error": "Database is currently unavailable."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        
+        serializer = ReportsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
