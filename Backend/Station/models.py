@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 
 # Create your models here.
 class Station(models.Model):
@@ -16,13 +18,13 @@ class Station(models.Model):
 
 class HourlyDensity(models.Model):
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    leftDensity = models.CharField(max_length=255, null=True) # Categorized density data
-    rightDensity = models.CharField(max_length=255, null=True)
+    timestamp = models.DateTimeField(default=timezone.now, editable=False)
+    leftDensity = models.FloatField(null=True)
+    rightDensity = models.FloatField(null=True)
 
 
 class DailyDensity(models.Model):
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    leftDensity = models.CharField(max_length=255, null=True) # Categorized density data
-    rightDensity = models.CharField(max_length=255, null=True)
+    timestamp = models.DateTimeField(default=timezone.now, editable=False)
+    leftDensity = models.FloatField(null=True)
+    rightDensity = models.FloatField(null=True)
