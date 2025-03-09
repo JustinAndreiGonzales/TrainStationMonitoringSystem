@@ -17,12 +17,12 @@ class Station(models.Model):
 class HourlyDensity(models.Model):
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    leftDensity = models.CharField(max_length=255, null=True) # Categorized density data
-    rightDensity = models.CharField(max_length=255, null=True)
+    leftDensity = models.FloatField(null=True)
+    rightDensity = models.FloatField(null=True)
 
 
 class DailyDensity(models.Model):
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    leftDensity = models.CharField(max_length=255, null=True) # Categorized density data
-    rightDensity = models.CharField(max_length=255, null=True)
+    leftDensity = models.FloatField(null=True)
+    rightDensity = models.FloatField(null=True)
