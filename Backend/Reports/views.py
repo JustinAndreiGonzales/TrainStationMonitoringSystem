@@ -21,7 +21,7 @@ class ReportsListView(ListAPIView):
 
     def get_queryset(self):
         if check_database_status():
-            return Reports.objects.all().order_by('datetimeReported')
+            return Reports.objects.all().order_by('-datetimeReported')
         return Reports.objects.none()
 
     def list(self, request, *args, **kwargs):
