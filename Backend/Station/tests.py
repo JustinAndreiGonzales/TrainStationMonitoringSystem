@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from unittest.mock import patch
-from .models import Station
+from .models import Station, HourlyDensity, DailyDensity
 
 
 class TestViews(APITestCase):
@@ -30,7 +30,9 @@ class TestViews(APITestCase):
         Station.objects.create(id=21, stationName="Recto", trainLine="LRT2", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
         Station.objects.create(id=22, stationName="Legarda", trainLine="LRT2", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
         Station.objects.create(id=23, stationName="Pureza", trainLine="LRT2", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
-        Station.objects.create(id=24, stationName="V. Mapa", trainLine="LRT2", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
+        
+        self.selected = Station.objects.create(id=24, stationName="V. Mapa", trainLine="LRT2", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
+        
         Station.objects.create(id=25, stationName="J. Ruiz", trainLine="LRT2", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
         Station.objects.create(id=26, stationName="Gilmore", trainLine="LRT2", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
         Station.objects.create(id=27, stationName="Betty Go-Belmonte", trainLine="LRT2", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
@@ -53,6 +55,34 @@ class TestViews(APITestCase):
         Station.objects.create(id=44, stationName="Ayala", trainLine="MRT3", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
         Station.objects.create(id=45, stationName="Magallanes", trainLine="MRT3", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
         Station.objects.create(id=46, stationName="Taft", trainLine="MRT3", leftETA=10, rightETA=3, leftCurrentDensity="Heavy", rightCurrentDensity="Light", leftCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", rightCCTV="https://res.cloudinary.com/stations-cctv/video/upload/station-1_cctv.mp4", isOperating=True, stationIMG="")
+
+
+        HourlyDensity.objects.create(id=1, station=self.selected, rightDensity=27.3, leftDensity=15.9, timestamp="2025-02-23T04:00:00Z")
+        HourlyDensity.objects.create(id=2, station=self.selected, rightDensity=12.9, leftDensity=23.1, timestamp="2025-02-23T05:00:00Z")
+        HourlyDensity.objects.create(id=3, station=self.selected, rightDensity=45.3, leftDensity=35.3, timestamp="2025-02-23T06:00:00Z")
+        HourlyDensity.objects.create(id=4, station=self.selected, rightDensity=35.1, leftDensity=49.4, timestamp="2025-02-23T07:00:00Z")
+        HourlyDensity.objects.create(id=5, station=self.selected, rightDensity=21.3, leftDensity=43.6, timestamp="2025-02-23T08:00:00Z")
+        HourlyDensity.objects.create(id=6, station=self.selected, rightDensity=27.3, leftDensity=15.9, timestamp="2025-02-23T09:00:00Z")
+        HourlyDensity.objects.create(id=7, station=self.selected, rightDensity=12.9, leftDensity=23.1, timestamp="2025-02-23T10:00:00Z")
+        HourlyDensity.objects.create(id=8, station=self.selected, rightDensity=45.3, leftDensity=35.3, timestamp="2025-02-23T11:00:00Z")
+        HourlyDensity.objects.create(id=9, station=self.selected, rightDensity=35.1, leftDensity=49.4, timestamp="2025-02-23T12:00:00Z")
+        HourlyDensity.objects.create(id=10, station=self.selected, rightDensity=21.3, leftDensity=43.6, timestamp="2025-02-23T13:00:00Z")
+        HourlyDensity.objects.create(id=11, station=self.selected, rightDensity=35.1, leftDensity=49.4, timestamp="2025-02-23T14:00:00Z")
+        HourlyDensity.objects.create(id=12, station=self.selected, rightDensity=21.3, leftDensity=43.6, timestamp="2025-02-23T15:00:00Z")
+        HourlyDensity.objects.create(id=13, station=self.selected, rightDensity=27.3, leftDensity=15.9, timestamp="2025-02-23T16:00:00Z")
+        HourlyDensity.objects.create(id=14, station=self.selected, rightDensity=12.9, leftDensity=23.1, timestamp="2025-02-23T17:00:00Z")
+        HourlyDensity.objects.create(id=15, station=self.selected, rightDensity=45.3, leftDensity=35.3, timestamp="2025-02-23T18:00:00Z")
+        HourlyDensity.objects.create(id=16, station=self.selected, rightDensity=35.1, leftDensity=49.4, timestamp="2025-02-23T19:00:00Z")
+        HourlyDensity.objects.create(id=17, station=self.selected, rightDensity=21.3, leftDensity=43.6, timestamp="2025-02-23T20:00:00Z")
+
+
+        DailyDensity.objects.create(id=1, station=self.selected, rightDensity=27.3, leftDensity=45.6, timestamp="2025-02-24T00:00:00Z")
+        DailyDensity.objects.create(id=2, station=self.selected, rightDensity=27.3, leftDensity=45.6, timestamp="2025-02-25T00:00:00Z")
+        DailyDensity.objects.create(id=3, station=self.selected, rightDensity=27.3, leftDensity=45.6, timestamp="2025-02-26T00:00:00Z")
+        DailyDensity.objects.create(id=4, station=self.selected, rightDensity=27.3, leftDensity=45.6, timestamp="2025-02-27T00:00:00Z")
+        DailyDensity.objects.create(id=5, station=self.selected, rightDensity=27.3, leftDensity=45.6, timestamp="2025-02-28T00:00:00Z")
+        DailyDensity.objects.create(id=6, station=self.selected, rightDensity=27.3, leftDensity=45.6, timestamp="2025-03-01T00:00:00Z")
+        DailyDensity.objects.create(id=7, station=self.selected, rightDensity=27.3, leftDensity=45.6, timestamp="2025-03-02T00:00:00Z")
 
 
     @patch("Station.views.check_database_status")
@@ -143,3 +173,11 @@ class TestViews(APITestCase):
         self.non_existend_uri = reverse("station-details", args=[50])
         res = self.client.get(self.non_existend_uri)
         self.assertEqual(res.status_code, 404)
+
+
+    def test_get_hourly_density(self):
+        ...
+    
+
+    def test_get_daily_density(self):
+        ...
