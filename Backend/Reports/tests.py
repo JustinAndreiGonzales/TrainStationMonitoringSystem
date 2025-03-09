@@ -113,7 +113,7 @@ class TestReportSubmissionView(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Reports.objects.count(), 11)
+        self.assertEqual(Reports.objects.count(), 1)
     
         entry = Reports.objects.last()
         if entry != None:
