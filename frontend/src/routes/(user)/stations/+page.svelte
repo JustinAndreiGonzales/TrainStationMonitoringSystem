@@ -23,9 +23,10 @@
   });
 
   async function fetchStations() {
-      const res = await fetch('https://trenph.up.railway.app/api/station/?format=json');
-      if (!res.ok) throw new Error("Failed to fetch stations");
-      return await res.json();
+    //const res = await fetch('station/');
+    const res = await fetch('https://trenph.up.railway.app/api/station/?format=json');
+    if (!res.ok) throw new Error("Failed to fetch stations");
+    return await res.json();
   }
 
   const getStationInfo = async (id: string) => {

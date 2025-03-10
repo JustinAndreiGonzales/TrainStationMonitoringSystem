@@ -17,7 +17,7 @@
 
         <div class="flex justify-center space-x-4">
             <Button src="/c.png" text="View station" href="/stations" />
-            <Button src="/d.png" text="Determine route" href="/" />
+            <Button src="/d.png" text="Determine route" href="/routes" />
         </div>
     </div>
 </div>

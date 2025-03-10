@@ -12,7 +12,7 @@
 </script>
 
 <button
-  class="max-w-sm mx-auto {bgColor} {hvrColor} {txtColor} {isBold} py-2 px-4 rounded"
+  class="max-w-sm h-full mx-auto {bgColor} {hvrColor} {txtColor} {isBold} py-2 px-4 rounded"
   on:click={navigate}
   disabled={!href}
 >
