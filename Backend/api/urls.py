@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView, TokenBlacklistView
 
-from Station.views import get_all_station, get_station, ProtectedView, get_cctv_feed, get_hourly_density, get_daily_density
+from Station.views import get_all_station, get_station, ProtectedView, get_cctv_feed, get_hourly_density, get_daily_density, get_current_density
 from Users.views import SignUpView, CustomTokenObtainPairView
 from Announcements.views import AnnouncementListView
 from Reports.views import ReportsListView, ReportSumbitView
@@ -15,7 +15,8 @@ urlpatterns = [
     # path('station/<int:id>/cctv-feed/', get_cctv_feed, name="cctv-feed"),
     path('station/<int:id>/cctv-feed/<str:platform_side>', get_cctv_feed, name="cctv-feed"),
 
-    # density history
+    # density
+    path('station/<int:id>/current-density/<str:platform_side>', get_current_density, name="current-density"),
     path('station/<int:id>/hourly-density/<str:platform_side>', get_hourly_density, name="hourly-density"),
     path('station/<int:id>/daily-density/<str:platform_side>', get_daily_density, name="daily-density"),
 
