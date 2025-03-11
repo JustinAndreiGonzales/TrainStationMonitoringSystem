@@ -27,7 +27,7 @@
 
       const ret = data.find(station => (station.id).toString() === id);
 
-      stationName = ret.stationName + ' ('+  ret.trainLine +  ') - ';
+      stationName = ' - ' + ret.stationName + ' ('+  ret.trainLine +  ')';
       return ret;
   }
   
@@ -65,11 +65,9 @@
 
 <title>Report Issue | Train Station Monitoring System</title>
 
-<h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">{stationName}Report Issue</h1>
+<h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Report Issue{stationName}</h1>
 <br>
-{#if loading}
-  <br>
-{:else}
+{#if !loading}
   {#if id}
     {#await getStationInfo(id)}
       <Loading />
