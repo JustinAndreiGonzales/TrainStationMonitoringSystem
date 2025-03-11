@@ -91,7 +91,7 @@ const getEndStation = (start, end) => {
         {#if i != 0}
         <div class="flex justify-left items-center space-x-1">
           <p class="inter-h1 text-2xl justify-right mr-5">{i*3}</p>
-          <p class="inter-body text-xl">Transfer train line to {findStation(subpath[0]).trainLine} at {findStation(subpath[0]).stationName} station</p>
+          <p class="inter-body text-xl">Transfer train line to {findStation(subpath[0]).trainLine} at {findStation(subpath[0]).stationName} station.</p>
         </div>
         {/if}
 
