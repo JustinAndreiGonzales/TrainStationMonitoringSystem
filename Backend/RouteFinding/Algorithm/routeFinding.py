@@ -1,4 +1,5 @@
 from .cost_matrices import lrt1_fare_matrix, lrt2_fare_matrix
+from .station_id import STATION_ID_TO_NAME, STATION_NAME_TO_ID
 
 LRT1 = [
     "Roosevelt",
@@ -117,11 +118,13 @@ def get_cost_in_line(src: str, dest: str, line: str):
         case "MRT3":
             return get_mrt3_fare(src, dest)
     
-def get_route_cost(src: str, dest: str):
-    src_line = get_line(src)
-    dest_line = get_line(dest)
+def get_route_cost(src: int, dest: int):
+    src_name = STATION_ID_TO_NAME[src]
+    dest_name = STATION_ID_TO_NAME[dest]
+    src_line = get_line(src_name)
+    dest_line = get_line(dest_name)
 
-    path = get_path(src, dest, src_line, dest_line)
+    path = get_path(src_name, dest_name, src_line, dest_line)
     
     final_path = []
     cost = []
@@ -130,7 +133,7 @@ def get_route_cost(src: str, dest: str):
         curr_line = get_line(path[curr])
         start = path[curr]
         next = path[curr+1]
-        final_path.append((start, next, get_station_distance(start, next, curr_line)))
+        final_path.append((STATION_NAME_TO_ID[start], STATION_NAME_TO_ID[next], get_station_distance(start, next, curr_line)))
         cost.append(get_cost_in_line(start, next, curr_line))
 
     return {"path": final_path, "cost": cost}

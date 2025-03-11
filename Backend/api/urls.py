@@ -36,7 +36,7 @@ urlpatterns = [
     path('reports/create/', ReportSumbitView.as_view(), name='report-submission'),
 
     # calculator
-    path('route/<str:src>/<str:dest>/', route_finding, name='route-finding'),
+    path('route/<int:src>/<int:dest>/', route_finding, name='route-finding'),
 
     path('test/', ProtectedView.as_view(), name='test')
 ]
