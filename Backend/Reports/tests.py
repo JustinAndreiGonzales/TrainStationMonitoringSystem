@@ -95,3 +95,40 @@ class TestReportsView(APITestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+class TestReportSubmissionView(APITestCase):
+    def setUp(self):
+        self.valid_data = {
+            "subject": "Test Subject",
+            "station": "Katipunan",
+            "body": "ipsum lorem."
+        }
+        self.submission_url = reverse("report-submission")
+
+    def test_create_report(self):
+        response = self.client.post(
+            self.submission_url, 
+            self.valid_data, 
+            format="json"
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Reports.objects.count(), 1)
+    
+        entry = Reports.objects.last()
+        if entry != None:
+            self.assertEqual(entry.subject, self.valid_data["subject"])
+            self.assertEqual(entry.station, self.valid_data["station"])
+            self.assertEqual(entry.body, self.valid_data["body"])
+
+    @patch("Reports.views.check_database_status")
+    def test_no_db_connection(self, mock_check_db_status):
+        mock_check_db_status.return_value = False
+        res = self.client.post(
+            self.submission_url, 
+            self.valid_data, 
+            format="json"
+        )
+
+        self.assertEqual(res.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
+        self.assertEqual(res.data, {"error": "Database is currently unavailable."})
