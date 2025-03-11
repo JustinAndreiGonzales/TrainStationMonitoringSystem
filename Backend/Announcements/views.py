@@ -19,7 +19,7 @@ class AnnouncementListView(ListAPIView):
 
     def get_queryset(self):
         if check_database_status():
-            return Announcements.objects.all().order_by('datetimePosted')
+            return Announcements.objects.all().order_by('-datetimePosted')
         return Announcements.objects.none()
 
     def list(self, request, *args, **kwargs):
