@@ -5,6 +5,7 @@
   import GoToButton from '$src/lib/GoToButton.svelte';
   import Loading from '$lib/Loading.svelte';
   import RadioButton from '$lib/RadioButton.svelte';
+  import Chart2 from '$lib/Chart2.svelte';
   import Chartt from '$lib/Chartt.svelte';
   import { onMount } from 'svelte';
 
@@ -86,16 +87,18 @@
       </div>
     {:then station}
       {#if station.isOperating}
-        <div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6">
-          <div class="flex flex-col justify-center items-center space-y-5 mb-20">
+        <div class="scale-70 sm:scale-100 sm:mb-20 origin-top mt-6">
+          <div class="flex flex-col justify-center items-center space-y-5">
             <!-- DIV1 - HEADER -->
-            <div class="flex flex-row justify-center items-end bg-gray-200 p-5 rounded-lg w-110">
-              <div>
+            <div class="flex flex-row items-center justify-between bg-gray-200 rounded-lg w-110 p-5">
+              <div class="flex flex-col">
                 <p class="inter-h1 text-2xl">{station.stationName}</p>
                 <p class="inter-body text-2xl">{station.trainLine}</p>
               </div>
-
-              <GoToButton text="Report an Issue" href={`/stations/report?id=${station.id}`}/>
+              
+              <div class="mr-[-1px]">
+                <GoToButton text="Report an Issue" href={`/stations/report?id=${station.id}`} />
+              </div>
             </div>
 
             <!-- DIV2 - ETA -->
@@ -121,11 +124,18 @@
 
               {#if currentSelected}
                 <p class="inter-body text-sm">{station.rightCurrentDensity}</p>
+                {#if station.leftCCTV}
+                  <GoToButton text="View CCTV" href={`/stations/cctv?id=${station.id}&stream=${currentSelected+1}`}/>
+                {/if}
               {:else}
                 <p class="inter-body text-sm">{station.leftCurrentDensity}</p>
+                {#if station.rightCCTV}
+                  <GoToButton text="View CCTV" href={`/stations/cctv?id=${station.id}&stream=${currentSelected+1}`}/>
+                {/if}
               {/if}
 
-              <GoToButton text="View CCTV" href={`/stations/cctv?id=${station.id}`}/>
+
+              
             </div>
 
             <!-- DIV4 - DAILY DENSITY -->
@@ -168,13 +178,13 @@
                 </div>
                 {#if hourlySelected}
                   {#if hourly[hourlySelected].length > 0}
-                    <Chartt vals={hourly[hourlySelected].map(obj => obj.rightDensity)}/>
+                    <Chart2 vals={hourly[hourlySelected].map(obj => obj.rightDensity)}/>
                   {:else}
                     <p class="inter-body text-sm">No available data for this selection.</p>
                   {/if}
                 {:else}
                   {#if hourly[hourlySelected].length > 0}
-                    <Chartt vals={hourly[hourlySelected].map(obj => obj.leftDensity)}/>
+                    <Chart2 vals={hourly[hourlySelected].map(obj => obj.leftDensity)}/>
                   {:else}
                     <p class="inter-body text-sm">No available data for this selection.</p>
                   {/if}

@@ -5,6 +5,7 @@
   import { onMount } from 'svelte';
 
   let id = '';
+  let stream = '';
   let loading = true;  
 
   let selectedStation = '';
@@ -15,6 +16,7 @@
       const url = new URL(window.location.href);
       const queryParams = new URLSearchParams(url.search);
       id = queryParams.get('id') || '';
+      stream = queryParams.get('stream') || '';
       loading = false;
   });
 
@@ -24,28 +26,47 @@
       const data = await res.json();
 
       selectedStation = ' - ' + data.stationName + ' ('+  data.trainLine +  ')';
-      selectedStream = '';
 
+      console.log("hi" + selectedStream);
       return data;
   }
+
+  
 </script>
 
 
 <title>View CCTV | Train Station Monitoring System</title>
-
-<h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">CCTV Feed{selectedStation}</h1>
-<br>
 
 {#if loading}
   <br>
 {:else}
   {#if id}
     {#await getStationInfo(id)}
-      <Loading />
+      <div class="flex justify-center items-center min-h-screen">
+        <Loading />
+      </div>
     {:then station}
-      {#if station.leftCCTV || station.rightCCTV}
       <div class="scale-80 sm:scale-100 md:scale-100 origin-top flex flex-col justify-center items-center space-y-3">
+        <h1 class="flex justify-center text-center inter-h1 text-3xl origin-top mt-6">CCTV Feed {stream}{selectedStation}</h1>
+        <br>
+        <!-- <div class="flex flex-col justify-center items-center space-y-5 w-lg"> -->
+        {#if stream == "1"}
+          <video 
+            class="w-full aspect-video rounded-lg object-cover" 
+            src={station.leftCCTV} autoplay loop muted playsinline
+          ></video>
+        {:else}
+          <video 
+            class="w-full aspect-video rounded-lg object-cover" 
+            src={station.rightCCTV} autoplay loop muted playsinline
+          ></video>
+        {/if}
+      </div>
+      <!--
+      {#if station.leftCCTV || station.rightCCTV}
+      <div class="scale-70 sm:scale-100 md:scale-100 origin-top flex flex-col justify-center items-center space-y-3">
         <div class="flex flex-col justify-center items-center space-y-5 w-lg">
+          
           <form class="w-full flex flex-col space-y-2">
             <select
               id="stations"
@@ -88,11 +109,16 @@
         </div>
         <Popup message={'Error! No currently available CCTVs'} href={`/stations?id=${id}`} text={"✕"} />
       {/if}
+      -->
     {:catch err}
-      <Popup message={err} href={"/"} text={"✕"} />
+      <div class="flex justify-center items-center min-h-screen">
+        <Popup message={err} href={"/"} text={"✕"} />
+      </div>
     {/await}
   {:else}
-    <Popup message={"Please select station first"} href={"/stations"} text={"✕"} />
+    <div class="flex justify-center items-center min-h-screen">
+      <Popup message={"Please select station first"} href={"/stations"} text={"✕"} />
+    </div>
   {/if}
 {/if}
 

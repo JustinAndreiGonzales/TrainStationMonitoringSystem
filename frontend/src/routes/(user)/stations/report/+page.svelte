@@ -65,7 +65,7 @@
 
 <title>Report Issue | Train Station Monitoring System</title>
 
-<h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Report Issue{stationName}</h1>
+<h1 class="text-center inter-h1 text-2xl sm:text-3xl origin-top mt-6">Report Issue{stationName}</h1>
 <br>
 {#if !loading}
   {#if id}

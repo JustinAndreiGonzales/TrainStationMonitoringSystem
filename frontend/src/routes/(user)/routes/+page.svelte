@@ -107,32 +107,32 @@ const stops = (num) => {
     </div>
   {:then route}
     <div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-5 flex flex-col justify-center items-center">
-      <h1 class="flex inter-h1 text-3xl">Routes - {findStation(Number(start)).stationName} to {findStation(Number(end)).stationName}</h1>
+      <h1 class="text-center inter-h1 text-3xl">Routes - {findStation(Number(start)).stationName} to {findStation(Number(end)).stationName}</h1>
       <div class="flex flex-col justify-center items-center mr-4">
         <div class="flex flex-col space-y-1">
           {#each route.path as subpath, i}
             {#if i != 0}
-            <div class="grid grid-cols-[auto_1fr] gap-2 items-center">
-              <span class="inter-h1 text-3xl text-right w-10">{i*3 + iStart - 1}</span>
+            <div class="grid grid-cols-[auto_1fr] gap-5 items-center">
+              <span class="inter-h1 text-3xl text-center w-10">{i*3 + iStart - 1}</span>
               <p class="inter-body text-lg">Transfer train line to {findStation(subpath[0]).trainLine} at {findStation(subpath[0]).stationName} station.</p>
             </div>
             {/if}
 
             {#if subpath[0] != subpath[1]}
-              <div class="grid grid-cols-[auto_1fr] gap-2 items-center">
-                <span class="inter-h1 text-3xl text-right w-10">{i*3 + iStart}</span>
+              <div class="grid grid-cols-[auto_1fr] gap-5 items-center">
+                <span class="inter-h1 text-3xl text-center w-10">{i*3 + iStart}</span>
                 <p class="inter-body text-lg">At {findStation(subpath[0]).trainLine} {findStation(subpath[0]).stationName} station, board the train going to {findStation(getEndStation(subpath[1],subpath[0])).stationName}.</p>
               </div>
               
-              <div class="grid grid-cols-[auto_1fr] gap-2 items-center">
-                <span class="inter-h1 text-3xl text-right w-10">{i*3 + iStart + 1}</span>
+              <div class="grid grid-cols-[auto_1fr] gap-5 items-center">
+                <span class="inter-h1 text-3xl text-center w-10">{i*3 + iStart + 1}</span>
                 <p class="inter-body text-lg">Ride for {stops(subpath[2])} and alight at {findStation(subpath[1]).stationName} station.</p>
               </div>
             {/if}
           {/each}
         </div>
-        <p class="inter-h1 text-lg mt-2">Total cost</p>  
-        <p class="inter-h1 text-2xl">Php {route.cost.reduce((s, a) => s + a, 0)}</p>  
+        <p class="inter-h1 text-md mt-5">Total cost:</p>  
+        <p class="inter-h2 text-2xl mt-[-5px]">Php {route.cost.reduce((s, a) => s + a, 0)}</p>  
       </div>
     </div>
   {:catch err}
