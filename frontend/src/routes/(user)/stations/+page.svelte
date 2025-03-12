@@ -123,14 +123,18 @@
               </div>
 
               {#if currentSelected}
-                <p class="inter-body text-sm">{station.rightCurrentDensity}</p>
                 {#if station.rightCCTV}
+                  <p class="inter-body text-sm">{station.rightCurrentDensity}</p>
                   <GoToButton text="View CCTV" href={`/stations/cctv?id=${station.id}&stream=${currentSelected+1}`}/>
-                {/if}
+                {:else}
+                  <p class="inter-body text-sm">No available data for this selection.</p>
+                {/if}  
               {:else}
-                <p class="inter-body text-sm">{station.leftCurrentDensity}</p>
                 {#if station.leftCCTV}
+                  <p class="inter-body text-sm">{station.leftCurrentDensity}</p>
                   <GoToButton text="View CCTV" href={`/stations/cctv?id=${station.id}&stream=${currentSelected+1}`}/>
+                {:else}
+                  <p class="inter-body text-sm">No available data for this selection.</p>
                 {/if}
               {/if}
 
