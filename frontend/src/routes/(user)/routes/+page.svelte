@@ -7,8 +7,16 @@
 
   let start = '';
   let end = '';
+  let iStart = 1;
   let stations = [];
   let loading = true;
+
+  let steps = [
+    { number: 1, text: "Take LRT-2 Train heading to <span class='text-blue-600'>Recto</span>" },
+    { number: 2, text: "Exit at <span class='text-blue-600'>Recto</span> and <span class='text-blue-600'>transfer</span> to LRT-1" },
+    { number: 3, text: "Take LRT-1 Train heading to <span class='text-blue-600'>FPJ</span>" },
+    { number: 4, text: "Exit at <span class='text-blue-600'>5th Avenue</span>" }
+  ];
 
   onMount(() => {
       const url = new URL(window.location.href);
@@ -31,11 +39,21 @@
     return stations.find(station => station.id === id) || null;
   }
 
+  function setIStart(path) {
+    if (path[0][2] === 0) {
+      iStart = -1;
+    }
+  }
+
   const getRouteInfo = async (start: string, end: string) => {
     if (!stations.length) fetchStations();
+    
     const res = await fetch(`https://trenph.up.railway.app/api/route/${start}/${end}/?format=json`)
     if (!res.ok) throw new Error("Error! No database connection");
     const data = await res.json();
+
+    setIStart(data.path);
+
     return data;
   }
 
@@ -73,6 +91,13 @@ const getEndStation = (start, end) => {
     return 0;
 }
 
+const stops = (num) => {
+  if (num > 1) {
+    return `${num} stops`;
+  }
+  return "1 stop";
+}
+
 </script>
 
 <title>Routes | Train Station Monitoring System</title>
@@ -85,29 +110,34 @@ const getEndStation = (start, end) => {
       <Loading />
     </div>
   {:then route}
-    <div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6">
+    <div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-5">
       <h1 class="flex justify-center inter-h1 text-3xl">Routes - {findStation(Number(start)).stationName} to {findStation(Number(end)).stationName}</h1>
-      {#each route.path as subpath, i}
-        {#if i != 0}
-        <div class="flex justify-left items-center space-x-1">
-          <p class="inter-h1 text-2xl justify-right mr-5">{i*3}</p>
-          <p class="inter-body text-xl">Transfer train line to {findStation(subpath[0]).trainLine} at {findStation(subpath[0]).stationName} station</p>
-        </div>
-        {/if}
+      <div class="flex flex-col justify-center items-center mr-4">
+        <div class="flex flex-col space-y-1">
+          {#each route.path as subpath, i}
+            {#if i != 0}
+            <div class="grid grid-cols-[auto_1fr] gap-2 items-center">
+              <span class="inter-h1 text-2xl text-right w-8">{i*3 + iStart - 1}</span>
+              <p class="inter-body text-lg">Transfer train line to {findStation(subpath[0]).trainLine} at {findStation(subpath[0]).stationName} station.</p>
+            </div>
+            {/if}
 
-        {#if subpath[0] != subpath[1]}
-          <div class="flex justify-left items-center space-x-1">
-            <p class="inter-h1 text-2xl justify-right mr-5">{i*3 + 1}</p>
-            <p class="inter-body text-xl">At {findStation(subpath[0]).trainLine} {findStation(subpath[0]).stationName} station, board the train going to {findStation(getEndStation(subpath[1],subpath[0])).stationName}.</p>
-          </div>
-          
-          <div class="flex justify-left items-center space-x-1">
-            <p class="inter-h1 text-2xl mr-5">{i*3 + 2}</p>
-            <p class="inter-body text-xl">Ride for {subpath[2]} stops and alight at {findStation(subpath[1]).stationName} station.</p>
-          </div>
-        {/if}
-      {/each}
-      <p class="flex justify-center inter-h1 text-3xl">Total cost: Php {route.cost.reduce((s, a) => s + a, 0)}</p>
+            {#if subpath[0] != subpath[1]}
+              <div class="grid grid-cols-[auto_1fr] gap-2 items-center">
+                <span class="inter-h1 text-2xl text-right w-8">{i*3 + iStart}</span>
+                <p class="inter-body text-lg">At {findStation(subpath[0]).trainLine} {findStation(subpath[0]).stationName} station, board the train going to {findStation(getEndStation(subpath[1],subpath[0])).stationName}.</p>
+              </div>
+              
+              <div class="grid grid-cols-[auto_1fr] gap-2 items-center">
+                <span class="inter-h1 text-2xl text-right w-8">{i*3 + iStart + 1}</span>
+                <p class="inter-body text-lg">Ride for {stops(subpath[2])} and alight at {findStation(subpath[1]).stationName} station.</p>
+              </div>
+            {/if}
+          {/each}
+        </div>
+        <p class="inter-h1 text-lg mt-2">Total cost</p>  
+        <p class="inter-h1 text-2xl">Php {route.cost.reduce((s, a) => s + a, 0)}</p>  
+      </div>
     </div>
   {:catch err}
     <!-- FIX: show page -->
