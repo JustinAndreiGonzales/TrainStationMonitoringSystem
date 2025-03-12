@@ -78,12 +78,12 @@ def get_path(src: str, dest: str, src_line: str, dest_line: str):
             case "LRT2", "LRT1":
                 return [src, "Recto", "Doroteo Jose", dest]
             case "LRT1", "MRT3":
-                if MRT3.index(dest) <=  8:
+                if MRT3.index(dest) <= 4:
                     return [src, "Doroteo Jose", "Recto", "Araneta-Cubao", "Cubao", dest]
                 else:
                     return [src, "EDSA", "Taft", dest]
             case "MRT3", "LRT1":
-                if MRT3.index(src) <= 8:
+                if MRT3.index(src) <= 4:
                     return [src, "Cubao", "Araneta-Cubao", "Recto", "Doroteo Jose", dest]
                 else:
                     return [src, "Taft", "EDSA", dest]
