@@ -124,12 +124,12 @@
 
               {#if currentSelected}
                 <p class="inter-body text-sm">{station.rightCurrentDensity}</p>
-                {#if station.leftCCTV}
+                {#if station.rightCCTV}
                   <GoToButton text="View CCTV" href={`/stations/cctv?id=${station.id}&stream=${currentSelected+1}`}/>
                 {/if}
               {:else}
                 <p class="inter-body text-sm">{station.leftCurrentDensity}</p>
-                {#if station.rightCCTV}
+                {#if station.leftCCTV}
                   <GoToButton text="View CCTV" href={`/stations/cctv?id=${station.id}&stream=${currentSelected+1}`}/>
                 {/if}
               {/if}
