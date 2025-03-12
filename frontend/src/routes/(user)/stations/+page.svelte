@@ -5,11 +5,15 @@
   import GoToButton from '$src/lib/GoToButton.svelte';
   import Loading from '$lib/Loading.svelte';
   import RadioButton from '$lib/RadioButton.svelte';
+  import Chartt from '$lib/Chartt.svelte';
   import { onMount } from 'svelte';
 
   let id = '';
   let loading = true;
-  let selected = 0;
+  let etaSelected = 0;
+  let currentSelected = 0;
+  let dailySelected = 0;
+  let hourlySelected = 0;
 
   onMount(() => {
       const url = new URL(window.location.href);
@@ -83,50 +87,106 @@
     {:then station}
       {#if station.isOperating}
         <div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6">
-          <div class="flex flex-col justify-center items-center space-y-1">
+          <div class="flex flex-col justify-center items-center space-y-5 mb-20">
             <!-- DIV1 - HEADER -->
-            <div class="flex flex-row items-end bg-gray-200 p-5 rounded-lg space-x-10">
+            <div class="flex flex-row justify-center items-end bg-gray-200 p-5 rounded-lg w-110">
               <div>
                 <p class="inter-h1 text-2xl">{station.stationName}</p>
                 <p class="inter-body text-2xl">{station.trainLine}</p>
               </div>
 
-              <GoToButton text="report" href={`/stations/report?id=${station.id}`}/>
+              <GoToButton text="Report an Issue" href={`/stations/report?id=${station.id}`}/>
             </div>
 
             <!-- DIV2 - ETA -->
-            <div class="flex flex-col items-center justify-center bg-gray-200 p-5 rounded-lg space-x-10">
-              <p class="inter-body text-3xl">ETA = {station.leftETA} vs {station.rightETA}</p>
+            <div class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
+              <p class="inter-h1 text-lg">Next Train ETA</p>
+              <div class="flex w-full scale-85">
+                <RadioButton options={["Left", "Right"]} values={[0, 1]} bind:selected={etaSelected} />
+              </div>
+
+              {#if etaSelected}
+                <p class="inter-body text-sm">{station.rightETA} mins away!</p>
+              {:else}
+                <p class="inter-body text-sm">{station.leftETA} mins away!</p>
+              {/if}
             </div>
 
             <!-- DIV3 - CURRENT DENSITY -->
-            <div class="flex flex-col items-center justify-center bg-gray-200 p-5 rounded-lg space-x-10">
-              <p class="inter-body text-3xl">Current density {station.leftCurrentDensity} vs {station.rightCurrentDensity}</p>
-              <GoToButton text="View cctv" href={`/stations/cctv?id=${station.id}`}/>
+            <div class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
+              <p class="inter-h1 text-lg">Current Density</p>
+              <div class="flex w-full scale-85">
+                <RadioButton options={["Left", "Right"]} values={[0, 1]} bind:selected={currentSelected} />
+              </div>
+
+              {#if currentSelected}
+                <p class="inter-body text-sm">{station.rightCurrentDensity}</p>
+              {:else}
+                <p class="inter-body text-sm">{station.leftCurrentDensity}</p>
+              {/if}
+
+              <GoToButton text="View CCTV" href={`/stations/cctv?id=${station.id}`}/>
             </div>
 
             <!-- DIV4 - DAILY DENSITY -->
-
-            <!-- DIV5 - HOURLY DENSITY -->
-            <!-- DUPLICATE: for hourly density -->
-            <div class="flex flex-col items-center justify-center bg-gray-200 rounded-lg space-x-10">
-              <p class="inter-h1">Daily density</p>
-
-              <RadioButton options={["Left", "Right"]} values={[0, 1]} bind:selected={selected} />
+            <div class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
+              <p class="inter-h1 text-lg">Daily Density</p>
 
               {#await getDailyDensity(id)}
                 <Loading />
               {:then daily}
-                <!-- FIX: BUTTON details -->
-                <!-- ADD: graph of density -->
-                <p class="inter-body">{daily[selected].length} {selected}</p>
+                <div class="flex w-full scale-85">
+                  <RadioButton options={["Left", "Right"]} values={[0, 1]} bind:selected={dailySelected} />
+                </div>
+                {#if dailySelected}
+                  {#if daily[dailySelected].length > 0}
+                    <Chartt vals={daily[dailySelected].map(obj => obj.rightDensity)}/>
+                  {:else}
+                    <p class="inter-body text-sm">No available data for this selection.</p>
+                  {/if}
+                {:else}
+                  {#if daily[dailySelected].length > 0}
+                    <Chartt vals={daily[dailySelected].map(obj => obj.leftDensity)}/>
+                  {:else}
+                    <p class="inter-body text-sm">No available data for this selection.</p>
+                  {/if}
+                {/if}
               {:catch err}
-                <p>{err}</p>
+                <p class="inter-body text-sm">No available data for Daily Density.</p>
+              {/await}              
+            </div>
+            
+            <!-- DIV5 - HOURLY DENSITY -->
+            <div class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
+              <p class="inter-h1 text-lg">Hourly Density</p>
+
+              {#await getHourlyDensity(id)}
+                <Loading />
+              {:then hourly}
+                <div class="flex w-full scale-85">
+                  <RadioButton options={["Left", "Right"]} values={[0, 1]} bind:selected={hourlySelected} />
+                </div>
+                {#if hourlySelected}
+                  {#if hourly[hourlySelected].length > 0}
+                    <Chartt vals={hourly[hourlySelected].map(obj => obj.rightDensity)}/>
+                  {:else}
+                    <p class="inter-body text-sm">No available data for this selection.</p>
+                  {/if}
+                {:else}
+                  {#if hourly[hourlySelected].length > 0}
+                    <Chartt vals={hourly[hourlySelected].map(obj => obj.leftDensity)}/>
+                  {:else}
+                    <p class="inter-body text-sm">No available data for this selection.</p>
+                  {/if}
+                {/if}
+              {:catch err}
+                <p class="inter-body text-sm">No available data for Hourly Density.</p>
               {/await}              
             </div>
 
-          </div>
+          </div>  
         </div>
+
       {:else}
         <div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6">
           <h1 class="flex justify-center inter-h1 text-3xl">Stations</h1>
