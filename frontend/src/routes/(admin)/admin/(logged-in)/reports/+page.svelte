@@ -90,7 +90,7 @@
   <div class="flex scale-80 flex-col items-center justify-center sm:scale-100 md:scale-100 origin-top mt-6 space-y-7">
     <h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Reports</h1>
   </div>
-  <Popup message={error} href={"/admin/home"} text={"✕"} />
+  <Popup message={"Error! No database connection"} href={"/admin/home"} text={"✕"} />
 {:then token}
   {#if !boo}
   <div class="flex scale-80 flex-col items-center justify-center sm:scale-100 md:scale-100 origin-top mt-6 space-y-7">
@@ -118,7 +118,7 @@
       </div>
     </div>
     {:catch error}
-    <Popup message={error} href={"/admin/home"} text={"✕"} />
+      <Popup message={"Error! No database connection"} href={"/admin/home"} text={"✕"} />
     {:then tokens}
       {toggleLoad()}
       <br>

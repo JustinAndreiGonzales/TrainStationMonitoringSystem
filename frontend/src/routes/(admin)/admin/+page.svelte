@@ -20,7 +20,7 @@
             window.location.href = '/admin/home';
         } else {
             if (result.message != "Invalid credentials") {
-                 loginFail = "Error: No database connection" + result.message;
+                 loginFail = "Error: No database connection";
             }
             else { 
                 loginFail = "Error: " + result.message;
