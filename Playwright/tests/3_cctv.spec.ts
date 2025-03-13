@@ -7,11 +7,14 @@ test('CCTV - All Good', async ({ page }) => {
 
     await page.getByText('View CCTV').click()
 
-    await expect(page).toHaveURL("https://trenph.vercel.app/stations/cctv?id=2");
+    await expect(page).toHaveURL("https://trenph.vercel.app/stations/cctv?id=2&stream=1");
 
-    await page.locator('#stations').selectOption({label: 'CCTV 1'});
+    await page.goto('https://trenph.vercel.app/stations?id=2');
 
-    await page.locator('#stations').selectOption({label: 'CCTV 2'});
+    await page.getByTestId('current-density').locator('Right').click();
+    await page.getByText('View CCTV').click()
+
+    await expect(page).toHaveURL("https://trenph.vercel.app/stations/cctv?id=2&stream=2");
   });
 
 test('CCTV - L Good', async ({ page }) => {
@@ -21,9 +24,7 @@ test('CCTV - L Good', async ({ page }) => {
 
     await page.getByText('View CCTV').click()
 
-    await expect(page).toHaveURL("https://trenph.vercel.app/stations/cctv?id=41");
-
-    await page.locator('#stations').selectOption({label: 'CCTV 1'});
+    await expect(page).toHaveURL("https://trenph.vercel.app/stations/cctv?id=41&stream=1");
   });
 
 test('CCTV - R Good', async ({ page }) => {
@@ -31,11 +32,10 @@ test('CCTV - R Good', async ({ page }) => {
 
     //await page.getByPlaceholder('Title').fill('Some Title');
 
+    await page.getByTestId('current-density').locator('Right').click();
     await page.getByText('View CCTV').click()
 
-    await expect(page).toHaveURL("https://trenph.vercel.app/stations/cctv?id=1");
-
-    await page.locator('#stations').selectOption({label: 'CCTV 2'});
+    await expect(page).toHaveURL("https://trenph.vercel.app/stations/cctv?id=1&stream=2");
   });
 
   test('CCTV - All Bad', async ({ page }) => {
@@ -43,9 +43,9 @@ test('CCTV - R Good', async ({ page }) => {
 
     //await page.getByPlaceholder('Title').fill('Some Title');
 
-    await page.getByText('View CCTV').click()
+    await expect(page.getByText('View CCTV')).toHaveCount(0);
 
-    await expect(page).toHaveURL("https://trenph.vercel.app/stations/cctv?id=24");
+    await page.getByTestId('current-density').locator('Right').click();
 
-    await page.getByText('Error! No currently available CCTVs')
+    await expect(page.getByText('View CCTV')).toHaveCount(0);
   });
