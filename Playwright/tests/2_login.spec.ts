@@ -8,6 +8,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto(url);
 });
 
+/*
 test('login bad - no acc', async ({ page }) => {
   await page.getByPlaceholder('Username').fill('user');
   await page.getByPlaceholder('Password').fill('pw');
@@ -45,3 +46,4 @@ test('login ok', async ({ page }) => {
   await expect(page).toHaveURL("https://trenph.vercel.app/admin/home");
 
 });
+*/

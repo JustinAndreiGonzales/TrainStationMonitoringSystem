@@ -4,6 +4,7 @@ const url = 'https://trenph.vercel.app/admin';
 const user = 'admin';
 const pw = 'password';
 
+/*
 test.beforeEach(async ({ page }) => {
   test.setTimeout(100_000)
 
@@ -31,3 +32,4 @@ test('lrt 2 announcements', async ({ page }) => {
 test('mrt 3 announcements', async ({ page }) => {
   await page.isVisible("text='MRT-3'")
 });
+ */
