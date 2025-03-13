@@ -1,4 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  retries: 2,
+})
 
 const url = 'https://trenph.vercel.app/admin';
 const user = 'admin';

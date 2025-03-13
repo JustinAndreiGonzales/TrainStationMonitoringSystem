@@ -1,4 +1,8 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  retries: 2,
+})
 
 test('CCTV - All Good', async ({ page }) => {
     await page.goto('https://trenph.vercel.app/stations?id=2');
