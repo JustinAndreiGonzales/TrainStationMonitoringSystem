@@ -90,7 +90,7 @@
         <div class="scale-70 sm:scale-100 sm:mb-20 origin-top mt-6">
           <div class="flex flex-col justify-center items-center space-y-5">
             <!-- DIV1 - HEADER -->
-            <div class="flex flex-row items-center justify-between bg-gray-200 rounded-lg w-110 p-5">
+            <div data-testid="station-header" class="flex flex-row items-center justify-between bg-gray-200 rounded-lg w-110 p-5">
               <div class="flex flex-col">
                 <p class="inter-h1 text-2xl">{station.stationName}</p>
                 <p class="inter-body text-2xl">{station.trainLine}</p>
@@ -102,7 +102,7 @@
             </div>
 
             <!-- DIV2 - ETA -->
-            <div class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
+            <div data-testid="eta" class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
               <p class="inter-h1 text-lg">Next Train ETA</p>
               <div class="flex w-full scale-85">
                 <RadioButton options={["Left", "Right"]} values={[0, 1]} bind:selected={etaSelected} />
@@ -116,7 +116,7 @@
             </div>
 
             <!-- DIV3 - CURRENT DENSITY -->
-            <div class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
+            <div data-testid="current-density" class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
               <p class="inter-h1 text-lg">Current Density</p>
               <div class="flex w-full scale-85">
                 <RadioButton options={["Left", "Right"]} values={[0, 1]} bind:selected={currentSelected} />
@@ -143,7 +143,7 @@
             </div>
 
             <!-- DIV4 - DAILY DENSITY -->
-            <div class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
+            <div data-testid="daily-density" class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
               <p class="inter-h1 text-lg">Daily Density</p>
 
               {#await getDailyDensity(id)}
@@ -171,7 +171,7 @@
             </div>
             
             <!-- DIV5 - HOURLY DENSITY -->
-            <div class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
+            <div data-testid="hourly-density" class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
               <p class="inter-h1 text-lg">Hourly Density</p>
 
               {#await getHourlyDensity(id)}
