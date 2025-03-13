@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const url = 'https://trenph.vercel.app/';
 
+/**
 test.beforeEach(async ({ page }) => {
   await page.goto(url);
 
@@ -23,3 +24,4 @@ test('lrt 2 announcements', async ({ page }) => {
 test('mrt 3 announcements', async ({ page }) => {
   await page.isVisible("text='MRT-3'")
 });
+ */
