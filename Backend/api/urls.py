@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenBlacklistView
 
 from Station.views import get_all_station, get_station, ProtectedView, get_cctv_feed, get_hourly_density, get_daily_density, get_current_density
 from Users.views import SignUpView, CustomTokenObtainPairView
-from Announcements.views import AnnouncementListView
+from Announcements.views import AnnouncementListView, AnnouncementCreateView, AnnouncementGetView, AnnouncementUpdateView
 from Reports.views import ReportsListView, ReportSumbitView
 from RouteFinding.views import route_finding
 
@@ -28,6 +28,9 @@ urlpatterns = [
 
     # annoucements
     path('announcements/', AnnouncementListView.as_view(), name='announcements'),
+    path('announcements/<int:pk>', AnnouncementGetView.as_view(), name="announcements-get"),
+    path('announcements/create/', AnnouncementCreateView.as_view(), name="annoucements-create"),
+    path('announcements/update/<int:pk>', AnnouncementUpdateView.as_view(), name="announcements-update"),
     # GET /announcements/?limit=3&offset=0 (limit - # to get, offset - index to start)
 
     # reports

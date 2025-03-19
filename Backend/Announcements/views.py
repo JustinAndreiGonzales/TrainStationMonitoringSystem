@@ -1,4 +1,5 @@
 from rest_framework.generics import ListAPIView
+from rest_framework.views import APIView
 from rest_framework.pagination import LimitOffsetPagination
 from django.db import OperationalError, connection
 from rest_framework.response import Response
@@ -27,7 +28,61 @@ class AnnouncementListView(ListAPIView):
             return Response({"error": "Database connection error"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
         return super().list(request, *args, **kwargs)
+    
+class AnnouncementCreateView(APIView):
+    def post(self, request):
+        if not check_database_status():
+            return Response(
+                {"error": "Database is currently unavailable."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        
+        serializer = AnnouncementSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class AnnouncementUpdateView(APIView):
+    def put(self, request, pk):
+        if not check_database_status():
+            return Response(
+                {"error": "Database is currently unavailable."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        
+        try:
+            announcement = Announcements.objects.get(pk=pk)
+        except:
+            return Response(
+                {"error": "Announcement not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        serializer = AnnouncementSerializer(announcement, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AnnouncementGetView(APIView):
+    def get(self, request, pk):
+        if not check_database_status():
+            return Response(
+                {"error": "Database is currently unavailable."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        
+        try:
+            announcement = Announcements.objects.get(pk=pk)
+            serializer = AnnouncementSerializer(announcement)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response(
+                {"error": "Announcement not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
 
 def check_database_status():
     try:
