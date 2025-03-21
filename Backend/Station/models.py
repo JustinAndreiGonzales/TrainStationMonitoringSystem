@@ -6,8 +6,8 @@ from django.utils import timezone
 class Station(models.Model):
     stationName = models.CharField(max_length=255)
     trainLine = models.CharField(max_length=255)
-    leftETA = models.IntegerField(null=True)
-    rightETA = models.IntegerField(null=True)
+    leftETA = models.DateTimeField(default=timezone.now, editable=False)
+    rightETA = models.DateTimeField(default=timezone.now, editable=False)
     leftCurrentDensity = models.CharField(max_length=255, null=True)
     rightCurrentDensity = models.CharField(max_length=255, null=True)
     leftCCTV = models.CharField(max_length=255, null=True)
