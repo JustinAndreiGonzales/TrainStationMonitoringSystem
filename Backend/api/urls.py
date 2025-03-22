@@ -28,7 +28,7 @@ urlpatterns = [
 
     # annoucements
     path('announcements/', AnnouncementListView.as_view(), name='announcements'),
-    path('announcements/create/', AnnouncementCreateView.as_view(), name="annoucements-create"),
+    path('announcements/create/', AnnouncementCreateView.as_view(), name="announcements-create"),
     path('announcements/update/<int:pk>', AnnouncementUpdateView.as_view(), name="announcements-update"),
     # GET /announcements/?limit=3&offset=0 (limit - # to get, offset - index to start)
 

@@ -8,4 +8,5 @@ class Announcements(models.Model):
     subject = models.CharField(max_length=255)
     body = models.TextField()
     datetimePosted = models.DateTimeField(default=timezone.now, editable=False)
-    tags = ArrayField(models.IntegerField(), blank=True, default=list)
+    tags = models.JSONField(blank=True, default=list)
+
