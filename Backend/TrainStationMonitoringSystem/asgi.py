@@ -8,9 +8,15 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
 """
 
 import os
-
 from django.core.asgi import get_asgi_application
+from channels.routing import ProtocolTypeRouter, URLRouter
+import Station.routing  # Replace "your_app" with your actual app name
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TrainStationMonitoringSystem.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "TrainStationMonitoringSystem.settings")
 
-application = get_asgi_application()
+application = ProtocolTypeRouter(
+    {
+        "http": get_asgi_application(),  # Handles HTTP requests
+        "websocket": URLRouter(Station.routing.websocket_urlpatterns),  # Handles WebSockets
+    }
+)

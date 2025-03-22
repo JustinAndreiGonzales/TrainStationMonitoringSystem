@@ -34,6 +34,8 @@ ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'trenph.up.railway.app']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels', 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -183,3 +185,11 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,  # Issue a new refresh token on each request
     "BLACKLIST_AFTER_ROTATION": True,  # Blacklist old refresh tokens after issuing a new one
 }
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
+ASGI_APPLICATION = "TrainStationMonitoringSystem.asgi.application"
