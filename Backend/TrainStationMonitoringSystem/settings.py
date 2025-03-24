@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-m519j$twvp!vv%^8$#ms4nk-3-s!-se8x3+ai1zqbpgt2g6g@w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'trenph.up.railway.app']
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'localhost', 'trenph.up.railway.app']
 
 
 # Application definition
@@ -193,3 +193,6 @@ CHANNEL_LAYERS = {
 }
 
 ASGI_APPLICATION = "TrainStationMonitoringSystem.asgi.application"
+
+CSRF_TRUSTED_ORIGINS = ["https://trenph.up.railway.app"]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

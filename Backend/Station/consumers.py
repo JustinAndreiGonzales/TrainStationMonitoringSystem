@@ -13,17 +13,23 @@ class TrainETAConsumer(AsyncWebsocketConsumer):
         self.station_id = self.scope["url_route"]["kwargs"]["station_id"]  # Get station ID from URL
         self.platform_side = self.scope["url_route"]["kwargs"]["platform_side"] # Get platform side from URL
         self.group_name = f"station_{self.station_id}_{self.platform_side}"  # WebSocket group for station
+        self.active_tasks = {}
 
         # Add connection to the station's group
         await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
         # Start sending ETA updates
-        asyncio.create_task(self.send_eta_updates(self.platform_side))
+        if self.group_name not in self.active_tasks:
+            self.active_tasks[self.group_name] = asyncio.create_task(self.send_eta_updates(self.platform_side))
 
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
+
+        if self.group_name in self.active_tasks:
+            self.active_tasks[self.group_name].cancel()
+            del self.active_tasks[self.group_name]
 
 
     async def send_eta_updates(self, platform_side):
@@ -54,7 +60,7 @@ class TrainETAConsumer(AsyncWebsocketConsumer):
                                 await asyncio.sleep(random.randint(15, 60)) # Simulate train stopping for a while
                         else:
                             await self.channel_layer.group_send(
-                                self.group_name, {"type": "send_eta", "message": f"{countdown}"}
+                                self.group_name, {"type": "send_eta", "message": f"{int(countdown.total_seconds() // 60)}"}
                             )
                     
                     case "right":
@@ -63,7 +69,7 @@ class TrainETAConsumer(AsyncWebsocketConsumer):
                         if countdown <= timedelta(seconds=0):
                             if first_pass:
                                 await self.update_rightETA(self.station_id)
-                                countdown = eta_data["leftETA"] - timezone.now()
+                                countdown = eta_data["rightETA"] - timezone.now()
                                 await self.channel_layer.group_send(
                                     self.group_name, {"type": "send_eta", "message": f"{countdown}"}
                                 )
@@ -77,12 +83,12 @@ class TrainETAConsumer(AsyncWebsocketConsumer):
                                 await asyncio.sleep(random.randint(15, 60)) # Simulate train stopping for a while
                         else:
                             await self.channel_layer.group_send(
-                                self.group_name, {"type": "send_eta", "message": f"{countdown}"}
+                                self.group_name, {"type": "send_eta", "message": f"{int(countdown.total_seconds() // 60)}"}
                             )
 
                     case _:
                         pass
-            
+                    
             await asyncio.sleep(5)
             first_pass = False
             

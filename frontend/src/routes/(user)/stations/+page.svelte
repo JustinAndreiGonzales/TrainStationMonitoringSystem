@@ -9,6 +9,10 @@
   import Chartt from '$lib/Chartt.svelte';
   import { onMount } from 'svelte';
 
+  import { connectWebSocket } from "$lib/websocket";
+
+  export let params; // Comes from the route /station/:id
+
   let id = '';
   let loading = true;
   let etaSelected = 0;
@@ -16,12 +20,64 @@
   let dailySelected = 0;
   let hourlySelected = 0;
 
+  let eta = "Loading...";
+  let socket = null;
+
+  let platform_side = "left";
+
+  $: platform_side = etaSelected === 0 ? "left" : "right";
+
   onMount(() => {
       const url = new URL(window.location.href);
       const queryParams = new URLSearchParams(url.search);
       id = queryParams.get('id') || '';
       loading = false;
+     
+      socket = connectWebSocket(id, platform_side, (data) => {
+        if (data) {
+          let intEta = parseInt(data, 10);
+
+          if (intEta > 1) {
+            eta = `Next train in ${data} minutes.`;
+          } else if (intEta === 1) {
+            eta = `Next train in ${data} minute.`;
+          } else if (intEta < 1) {
+            eta = `Train is arriving soon!`;
+          } else {
+            eta = data;
+          }
+          
+        }
+      });
+
+      return () => {
+        socket.close();
+      };
   });
+
+  $: console.log("etaSelected =", etaSelected, "-> platform_side =", platform_side);
+
+  $: {
+    if (socket) {
+      socket.close();
+
+      socket = connectWebSocket(id, platform_side, (data) => {
+        if (data) {
+          let intEta = parseInt(data, 10);
+
+          if (intEta > 1) {
+            eta = `Next train in ${data} minutes.`;
+          } else if (intEta === 1) {
+            eta = `Next train in ${data} minute.`;
+          } else if (intEta < 1) {
+            eta = `Train is arriving soon!`;
+          } else {
+            eta = data;
+          }
+        }
+      });
+    }
+  }
 
   async function fetchStations() {
     const res = await fetch('https://trenph.up.railway.app/api/station/?format=json');
@@ -99,7 +155,7 @@
               <div class="mr-[-1px]">
                 <GoToButton text="Report an Issue" href={`/stations/report?id=${station.id}`} />
               </div>
-            </div>
+            </div>       
 
             <!-- DIV2 - ETA -->
             <div data-testid="eta" class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
@@ -107,12 +163,7 @@
               <div class="flex w-full scale-85">
                 <RadioButton options={["Left", "Right"]} values={[0, 1]} bind:selected={etaSelected} />
               </div>
-
-              {#if etaSelected}
-                <p class="inter-body text-sm">{station.rightETA} mins away!</p>
-              {:else}
-                <p class="inter-body text-sm">{station.leftETA} mins away!</p>
-              {/if}
+              <p class="inter-body text-sm">{eta}</p>
             </div>
 
             <!-- DIV3 - CURRENT DENSITY -->
