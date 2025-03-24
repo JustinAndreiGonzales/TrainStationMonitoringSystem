@@ -20,6 +20,7 @@
   let dailySelected = 0;
   let hourlySelected = 0;
 
+<<<<<<< Updated upstream
   let eta = "Loading...";
   let socket = null;
 
@@ -53,6 +54,66 @@
       return () => {
         socket.close();
       };
+=======
+  let etaL = '';
+  let etaR = '';
+
+  onMount(() => {
+    const url = new URL(window.location.href);
+    const queryParams = new URLSearchParams(url.search);
+    id = queryParams.get('id') || '';
+    loading = false;
+
+    if (id) {
+      const sockL = new WebSocket(`wss://trenph.up.railway.app/ws/eta/${id}/left/`);
+      const sockR = new WebSocket(`wss://trenph.up.railway.app/ws/eta/${id}/right/`);
+
+      sockL.onopen = () => {
+        console.log("Receiving ETA left details...");
+      };
+
+      sockL.onmessage = (event) => {
+        etaL = event.data.slice(1, -1);
+
+        if (!isNaN(Number(etaL))) {
+          if (Number(etaL) == 0) {
+            etaL = "Train is stopping..."
+          }
+          else if (Number(etaL) > 1) {
+            etaL = etaL + " mins left"
+          }
+          else {
+            etaL = etaL + " min left"
+          }
+        }
+      };
+
+      sockR.onopen = () => {
+        console.log("Receiving ETA right details...");
+      };
+
+      sockR.onmessage = (event) => {
+        etaR = event.data.slice(1, -1);
+
+        if (!isNaN(Number(etaR))) {
+          if (Number(etaR) == 0) {
+            etaR = "Train is stopping..."
+          }
+          else if (Number(etaR) > 1) {
+            etaR = etaR + " mins left"
+          }
+          else {
+            etaR = etaR + " min left"
+          }
+        }
+      };
+
+      return () => {
+        sockL.close();
+        sockR.close();
+      };
+    }
+>>>>>>> Stashed changes
   });
 
   $: console.log("etaSelected =", etaSelected, "-> platform_side =", platform_side);
@@ -89,7 +150,6 @@
     const res = await fetch(`https://trenph.up.railway.app/api/station/${id}/?format=json`)
     // ERROR!
     const data = await res.json();
-    console.log(id)
     return data;
   }
 
@@ -163,7 +223,22 @@
               <div class="flex w-full scale-85">
                 <RadioButton options={["Left", "Right"]} values={[0, 1]} bind:selected={etaSelected} />
               </div>
+<<<<<<< Updated upstream
               <p class="inter-body text-sm">{eta}</p>
+=======
+
+              {#if etaSelected}
+                {#if !etaR}
+                  <Loading />
+                {/if}
+                <p class="inter-body text-sm">{etaR}</p>
+              {:else}
+                {#if !etaL}
+                  <Loading />
+                {/if}
+                <p class="inter-body text-sm">{etaL}</p>
+              {/if}
+>>>>>>> Stashed changes
             </div>
 
             <!-- DIV3 - CURRENT DENSITY -->

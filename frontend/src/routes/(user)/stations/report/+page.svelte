@@ -94,7 +94,7 @@
 
       {#if error }
         {#if error == 'done'}
-        <Popup message={"Report has been submitted successsfully!"} color='bg-green-700' txtColor='text-green-600' href={`/`} text={"✕"} />
+          <Popup message={"Report has been submitted successsfully!"} color='bg-green-700' txtColor='text-green-600' href={`/`} text={"✕"} />
         {:else if error != 'title' && error != 'details' && error != 'both'}
           <Popup message={error} href={`/`} text={"✕"} />
         {:else}

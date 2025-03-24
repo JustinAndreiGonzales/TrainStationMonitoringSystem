@@ -1,10 +1,13 @@
 <script>
   import Post from "$lib/Post.svelte";
-  import Loading from "$lib/Loading.svelte"
+  import Loading from "$lib/Loading.svelte";
+  import PostPopup from "$lib/PostPopup.svelte";
   import { formatDateTime } from "./formatDateTime";
 
   export let max;
   export let posts;
+  export let admin = false;
+
   let offset = posts.length;
   let allPosts = [...posts];
   let newPosts = [];
@@ -29,6 +32,9 @@
   }
 
   $: allPosts = [...allPosts, ...newPosts]
+
+  let postData = null;
+  let postDelete = null;
 </script>
 
 <div class="flex flex-col items-center min-h-screen space-y-7 pb-25 mx-20">
@@ -38,10 +44,16 @@
     {/if}
 
     <Post 
-      title='[{p.author}] {p.subject}' 
+      id={p.id}
+      subject={p.subject}
+      author={p.author}
       body={p.body} 
       time={formatDateTime(p.datetimePosted).time} 
       date={formatDateTime(p.datetimePosted).date}
+      admin={admin}
+      tags={p.tags}
+      on:openPost={(e) => postData = e.detail}
+      on:deletePost={(e) => postDelete = e.detail}
     />
   {/each}
 
@@ -59,3 +71,19 @@
     {/if}
   {/if}
 </div>
+
+{#if postData}
+  <PostPopup 
+    posts={allPosts}
+    id={postData.id}
+    author={postData.author}
+    title={postData.subject}
+    ogTitle={postData.subject}
+    body={postData.body}
+    ogBody={postData.body}
+    selectedTags={postData.tags}
+    text="X"
+  />
+{/if}
+
+

@@ -18,17 +18,24 @@ export async function POST({ request, cookies }) {
             path: '/admin',
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 60 * 5
+            maxAge: 60 * 10
         });
 
         cookies.set('refresh_token', data.refresh, {
             path: '/admin',
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 60 * 5
+            maxAge: 60 * 10
         });
 
-        return json({ success: true, token: data.access, refresh: data.refresh });
+        cookies.set('username', data.username, {
+            path: '/admin',
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 10
+        });
+
+        return json({ success: true, token: data.access, refresh: data.refresh, user: data.username });
     }
 
     return json({ success: false, message: 'Invalid credentials' }, { status: 401 });
@@ -42,5 +49,6 @@ export async function GET({ cookies }) {
 export async function DELETE({ cookies }) {
     cookies.delete('admin_auth', { path: '/admin' });
     cookies.delete('refresh_token', { path: '/admin' });
+    cookies.delete('user', { path: '/admin' });
     return json({ success: true });
 }
