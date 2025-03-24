@@ -1,1 +1,1 @@
-web: daphne -b 0.0.0.0 -p $PORT TrainStationMonitoringSystem.asgi:application
+web: DJANGO_SETTINGS_MODULE=TrainStationMonitoringSystem.settings daphne -b 0.0.0.0 -p $PORT TrainStationMonitoringSystem.asgi:application
