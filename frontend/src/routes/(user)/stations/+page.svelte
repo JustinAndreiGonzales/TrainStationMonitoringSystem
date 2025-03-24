@@ -20,41 +20,6 @@
   let dailySelected = 0;
   let hourlySelected = 0;
 
-<<<<<<< Updated upstream
-  let eta = "Loading...";
-  let socket = null;
-
-  let platform_side = "left";
-
-  $: platform_side = etaSelected === 0 ? "left" : "right";
-
-  onMount(() => {
-      const url = new URL(window.location.href);
-      const queryParams = new URLSearchParams(url.search);
-      id = queryParams.get('id') || '';
-      loading = false;
-     
-      socket = connectWebSocket(id, platform_side, (data) => {
-        if (data) {
-          let intEta = parseInt(data, 10);
-
-          if (intEta > 1) {
-            eta = `Next train in ${data} minutes.`;
-          } else if (intEta === 1) {
-            eta = `Next train in ${data} minute.`;
-          } else if (intEta < 1) {
-            eta = `Train is arriving soon!`;
-          } else {
-            eta = data;
-          }
-          
-        }
-      });
-
-      return () => {
-        socket.close();
-      };
-=======
   let etaL = '';
   let etaR = '';
 
@@ -63,7 +28,7 @@
     const queryParams = new URLSearchParams(url.search);
     id = queryParams.get('id') || '';
     loading = false;
-
+    
     if (id) {
       const sockL = new WebSocket(`wss://trenph.up.railway.app/ws/eta/${id}/left/`);
       const sockR = new WebSocket(`wss://trenph.up.railway.app/ws/eta/${id}/right/`);
@@ -113,32 +78,7 @@
         sockR.close();
       };
     }
->>>>>>> Stashed changes
   });
-
-  $: console.log("etaSelected =", etaSelected, "-> platform_side =", platform_side);
-
-  $: {
-    if (socket) {
-      socket.close();
-
-      socket = connectWebSocket(id, platform_side, (data) => {
-        if (data) {
-          let intEta = parseInt(data, 10);
-
-          if (intEta > 1) {
-            eta = `Next train in ${data} minutes.`;
-          } else if (intEta === 1) {
-            eta = `Next train in ${data} minute.`;
-          } else if (intEta < 1) {
-            eta = `Train is arriving soon!`;
-          } else {
-            eta = data;
-          }
-        }
-      });
-    }
-  }
 
   async function fetchStations() {
     const res = await fetch('https://trenph.up.railway.app/api/station/?format=json');
@@ -223,9 +163,6 @@
               <div class="flex w-full scale-85">
                 <RadioButton options={["Left", "Right"]} values={[0, 1]} bind:selected={etaSelected} />
               </div>
-<<<<<<< Updated upstream
-              <p class="inter-body text-sm">{eta}</p>
-=======
 
               {#if etaSelected}
                 {#if !etaR}
@@ -238,7 +175,6 @@
                 {/if}
                 <p class="inter-body text-sm">{etaL}</p>
               {/if}
->>>>>>> Stashed changes
             </div>
 
             <!-- DIV3 - CURRENT DENSITY -->
