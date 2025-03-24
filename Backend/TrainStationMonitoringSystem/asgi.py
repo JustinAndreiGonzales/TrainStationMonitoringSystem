@@ -26,7 +26,7 @@ django.setup()
 
 import Station.routing  # Replace "your_app" with your actual app name
 application = ProtocolTypeRouter({
-    "https": get_asgi_application(),
+    "http": get_asgi_application(),
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter(
