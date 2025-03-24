@@ -1,5 +1,5 @@
 export function connectWebSocket(station_id: string, platform_side: string, onMessage: (data: any) => void) {
-    const socket = new WebSocket(`ws://127.0.0.1:8000/ws/eta/${station_id}/${platform_side}/`);
+    const socket = new WebSocket(`wss://trenph.up.railway.app/ws/eta/${station_id}/${platform_side}/`);
     console.log("Attempting to connect WebSocket to:", socket);
     
     socket.onmessage = (event) => {
