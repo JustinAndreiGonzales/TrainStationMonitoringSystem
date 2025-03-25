@@ -31,15 +31,14 @@
       return ret;
   }
   
-  async function postReport(station) {
-    // UPDATE: link?
+  async function postReport(station, line) {
     if (subject && body) {
       const res = await fetch('https://trenph.up.railway.app/api/reports/create/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           subject: subject,
-          station: station,
+          station: line + ',' + station,
           body: body,
         })  
       })
@@ -78,7 +77,7 @@
           <textarea rows="50" id="details" bind:value={body} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full h-50 p-2.5 dark:bg-gray-700 inter-body resize-none" placeholder="Write details here..." required></textarea>
           <button
             class="max-w-sm mx-auto bg-blue-600 hover:bg-blue-700 text-white inter-body text-sm w-full py-2 px-4 rounded"
-            on:click={postReport(station.stationName)}
+            on:click={postReport(station.stationName, station.trainLine)}
           >
             Submit
           </button> 

@@ -18,7 +18,8 @@
       {/if}
 
       <Post 
-        title='[{p.station}] {p.subject}' 
+        tags={p.station.split(',')}
+        subject={p.subject}
         body={p.body} 
         time={formatDateTime(p.datetimeReported).time} 
         date={formatDateTime(p.datetimeReported).date}
