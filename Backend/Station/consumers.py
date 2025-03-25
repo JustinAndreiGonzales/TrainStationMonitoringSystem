@@ -41,49 +41,53 @@ class TrainETAConsumer(AsyncWebsocketConsumer):
             if eta_data:
                 match platform_side:
                     case "left":
-                        countdown = eta_data["leftETA"] - timezone.now()
+                        if eta_data["leftETA"]:
+                            countdown = eta_data["leftETA"] - timezone.now()
+                            min_left = int(countdown.total_seconds() // 60)
 
-                        if countdown <= timedelta(seconds=0):
-                            if first_pass:
-                                await self.update_leftETA(self.station_id)
-                                countdown = eta_data["leftETA"] - timezone.now()
-                                await self.channel_layer.group_send(
-                                    self.group_name, {"type": "send_eta", "message": f"{countdown}"}
-                                )
+                            if min_left <= 0:
+                                if first_pass:
+                                    await self.update_leftETA(self.station_id)
+                                else:
+                                    await self.channel_layer.group_send(
+                                        self.group_name, {"type": "send_eta", "message": f"{min_left}"}
+                                    )
+
+                                    await self.update_leftETA(self.station_id)
+
+                                    await asyncio.sleep(random.randint(25, 60)) # Simulate train stopping for a while
                             else:
                                 await self.channel_layer.group_send(
-                                    self.group_name, {"type": "send_eta", "message": "Train has arrived!"}
+                                    self.group_name, {"type": "send_eta", "message": f"{min_left}"}
                                 )
-
-                                await self.update_leftETA(self.station_id)
-
-                                await asyncio.sleep(random.randint(15, 60)) # Simulate train stopping for a while
                         else:
                             await self.channel_layer.group_send(
-                                self.group_name, {"type": "send_eta", "message": f"{int(countdown.total_seconds() // 60)}"}
+                                self.group_name, {"type": "send_eta", "message": "Service is currently unavailable."}
                             )
                     
                     case "right":
-                        countdown = eta_data["rightETA"] - timezone.now()
+                        if eta_data["rightETA"]:
+                            countdown = eta_data["rightETA"] - timezone.now()
+                            min_left = int(countdown.total_seconds() // 60)
 
-                        if countdown <= timedelta(seconds=0):
-                            if first_pass:
-                                await self.update_rightETA(self.station_id)
-                                countdown = eta_data["rightETA"] - timezone.now()
-                                await self.channel_layer.group_send(
-                                    self.group_name, {"type": "send_eta", "message": f"{countdown}"}
-                                )
+                            if min_left <= 0:
+                                if first_pass:
+                                    await self.update_rightETA(self.station_id)
+                                else:
+                                    await self.channel_layer.group_send(
+                                        self.group_name, {"type": "send_eta", "message": f"{min_left}"}
+                                    )
+
+                                    await self.update_rightETA(self.station_id)
+
+                                    await asyncio.sleep(random.randint(25, 60)) # Simulate train stopping for a while
                             else:
                                 await self.channel_layer.group_send(
-                                    self.group_name, {"type": "send_eta", "message": "Train has arrived!"}
+                                    self.group_name, {"type": "send_eta", "message": f"{min_left}"}
                                 )
-
-                                await self.update_rightETA(self.station_id)
-
-                                await asyncio.sleep(random.randint(15, 60)) # Simulate train stopping for a while
                         else:
                             await self.channel_layer.group_send(
-                                self.group_name, {"type": "send_eta", "message": f"{int(countdown.total_seconds() // 60)}"}
+                                self.group_name, {"type": "send_eta", "message": "Service is currently unavailable."}
                             )
 
                     case _:
@@ -92,7 +96,6 @@ class TrainETAConsumer(AsyncWebsocketConsumer):
             await asyncio.sleep(5)
             first_pass = False
             
-
 
     async def send_eta(self, event):
         await self.send(text_data=json.dumps(event["message"]))
@@ -103,7 +106,7 @@ class TrainETAConsumer(AsyncWebsocketConsumer):
         station = Station.objects.get(id=station_id)
 
         if station:
-            station.leftETA = (timezone.now() + timedelta(minutes=random.randint(3, 20))) # Simulate train ETA
+            station.leftETA = (timezone.now() + timedelta(minutes=random.randint(5, 20))) # Simulate train ETA
             station.save()
 
 
@@ -112,7 +115,7 @@ class TrainETAConsumer(AsyncWebsocketConsumer):
         station = Station.objects.get(id=station_id)
 
         if station:
-            station.rightETA = (timezone.now() + timedelta(minutes=random.randint(3, 20))) # Simulate train ETA
+            station.rightETA = (timezone.now() + timedelta(minutes=random.randint(5, 20))) # Simulate train ETA
             station.save()
 
 
@@ -121,8 +124,6 @@ class TrainETAConsumer(AsyncWebsocketConsumer):
         station = Station.objects.get(id=station_id)
         if station:
             return {
-                "station_id": station_id,
-                "station_name": station.stationName,
                 "leftETA": station.leftETA, 
                 "rightETA": station.rightETA,
             }
