@@ -61,12 +61,17 @@
   }
 
   function submitOk(a, b, c, d) {
+    let notEmpty = (a && b);
+
     if(edit) {
-      return (ogTitle != a || ogBody != b || !(equalArr(c, d)) && options.length);
+      let wasChanged = (ogTitle != a || ogBody != b || !(equalArr(c, d)) && options.length);
+      return wasChanged && notEmpty;
     }
-    return (a && b);
+
+    return notEmpty;
   }
 </script>
+
 <div class="flex flex-col items-center justify-center space-y-4">
   <div class="border border-gray-300 rounded-lg w-full max-w-200 bg-white">
     <input

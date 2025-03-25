@@ -38,6 +38,7 @@
       };
 
       sockL.onmessage = (event) => {
+        console.log('L: ', event.data);
         etaL = event.data.slice(1, -1);
 
         if (!isNaN(Number(etaL))) {
@@ -58,6 +59,7 @@
       };
 
       sockR.onmessage = (event) => {
+        console.log('R: ', event.data);
         etaR = event.data.slice(1, -1);
 
         if (!isNaN(Number(etaR))) {
