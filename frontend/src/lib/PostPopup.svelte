@@ -15,11 +15,11 @@
   let tags = [];
   let result = "";
 
-  async function submitEdit()  {
-    console.log("id is " + id);
-    
+  async function submitEdit()  {    
     // [SP4] FIX: posts checking is stale
-    if (posts.some(f => f.id === id)) {  
+    // if (posts.some(f => f.id === id)) {  
+      //const res = await fetch(`https://httpstat.us/500`);
+
       const res = await fetch(`https://trenph.up.railway.app/api/announcements/update/${id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -31,9 +31,9 @@
             tags: tags,
           })  
       })
-
+      
       if (!res.ok) {
-        result = "Error! No database connection";
+        result = "Error! Unable to edit announcement";
       }
 
       else {
@@ -41,15 +41,17 @@
       }    
     }
 
+    /*
     else {
       result = "Error! Announcement could not be found."
     }
-  }  
+    */
+  //}  
 </script>
 
 {#if result}
   {#if result.includes("Error!")}
-    <Popup message={result} href={"/admin/announcements"} text={"✕"}/>
+    <Popup message={result} href={"/admin/home"} text={"✕"}/>
   {:else}
     <Popup message={result} href={"/admin/announcements"} text={"✕"} color="bg-green-700" txtColor="text-green-700"/>
   {/if}

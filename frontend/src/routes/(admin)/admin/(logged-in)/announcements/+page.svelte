@@ -16,6 +16,7 @@
   }
 
   async function postAnnouncement() {
+    //const res = await fetch(`https://httpstat.us/500`);
     const res = await fetch('https://trenph.up.railway.app/api/announcements/create/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -26,16 +27,14 @@
         body: body,
         tags: tags,
       })  
-    })
+    });
 
     if (!res.ok) {
-      result = 'Error! No database connection'
+      result = 'Error! Unable to post announcement';
     }
     else {
       result = 'Announcement has been successfully posted!';
-    }
-
-    console.log(result);
+    } 
   }
 </script>
 
@@ -57,7 +56,7 @@
       
   {#if result}
     {#if result.includes("Error!")}
-      <Popup message={result} href={"/admin/announcements"} text={"✕"} />
+      <Popup message={result} href={"/admin/home"} text={"✕"} />
     {:else}
       <Popup message={result} href={"/admin/announcements"} text={"✕"} color="bg-green-700" txtColor="text-green-700" />
     {/if}
