@@ -7,11 +7,10 @@
   import RadioButton from '$lib/RadioButton.svelte';
   import Chart2 from '$lib/Chart2.svelte';
   import Chartt from '$lib/Chartt.svelte';
+  import ETABar from '$lib/ETABar.svelte';
   import { onMount } from 'svelte';
 
-  import { connectWebSocket } from "$lib/websocket";
-
-  export let params; // Comes from the route /station/:id
+  export let params;
 
   let id = '';
   let loading = true;
@@ -20,8 +19,13 @@
   let dailySelected = 0;
   let hourlySelected = 0;
 
+  let stationsList = [];
+  let prevL = '';
   let etaL = '';
+  let etaLprog = '';
+  let prevR = '';
   let etaR = '';
+  let etaRprog = '';
 
   onMount(() => {
     const url = new URL(window.location.href);
@@ -33,15 +37,19 @@
       const sockL = new WebSocket(`wss://trenph.up.railway.app/ws/eta/${id}/left/`);
       const sockR = new WebSocket(`wss://trenph.up.railway.app/ws/eta/${id}/right/`);
 
+      /*
       sockL.onopen = () => {
         console.log("Receiving ETA left details...");
       };
+      */
 
       sockL.onmessage = (event) => {
-        console.log('L: ', event.data);
+        // console.log('L: ', event.data);
         etaL = event.data.slice(1, -1);
 
         if (!isNaN(Number(etaL))) {
+          etaLprog = String(Number((20 - Number(etaL)) / 20 * 100)) + "%";
+          
           if (Number(etaL) == 0) {
             etaL = "Train is stopping..."
           }
@@ -54,15 +62,19 @@
         }
       };
 
+      /*
       sockR.onopen = () => {
         console.log("Receiving ETA right details...");
       };
+      */
 
       sockR.onmessage = (event) => {
-        console.log('R: ', event.data);
+        // console.log('R: ', event.data);
         etaR = event.data.slice(1, -1);
 
         if (!isNaN(Number(etaR))) {
+          etaRprog = String(Number((20 - Number(etaR)) / 20 * 100)) + "%";
+
           if (Number(etaR) == 0) {
             etaR = "Train is stopping..."
           }
@@ -82,17 +94,42 @@
     }
   });
 
-  async function fetchStations() {
+  async function fetchStations() {  
     const res = await fetch('https://trenph.up.railway.app/api/station/?format=json');
     if (!res.ok) throw new Error("Failed to fetch stations");
     return await res.json();
   }
 
   const getStationInfo = async (id: string) => {
+    if (stationsList.length == 0) {
+      stationsList = await fetchStations();
+    }
     const res = await fetch(`https://trenph.up.railway.app/api/station/${id}/?format=json`)
     // ERROR!
     const data = await res.json();
+
+    getPrevStations(id, data.trainLine);
     return data;
+  }
+
+  function getPrevStations(id: string, line: string) {
+    let initialL = stationsList.find(x => x.id == Number(id)+1 && x.trainLine == line);
+  
+    if (initialL === undefined) {
+      prevL = 'Train dock';
+    }
+    else {
+      prevL = initialL.stationName;
+    }
+
+    let initialR = stationsList.find(x => x.id == Number(id)-1 && x.trainLine == line);
+
+    if (initialR === undefined) {
+      prevR = 'Train dock';
+    }
+    else{
+      prevR = initialR.stationName;
+    }
   }
 
   const getHourlyDensity = async (id: string) => {
@@ -140,9 +177,11 @@
   {#if id}
     {#await getStationInfo(id)}
       <!-- FIX MAYBE: show page -->
+      {#await fetchStations()}
       <div class="flex justify-center items-center min-h-screen">
         <Loading />
       </div>
+      {/await}
     {:then station}
       {#if station.isOperating}
         <div class="scale-70 sm:scale-100 sm:mb-20 origin-top mt-6">
@@ -169,13 +208,21 @@
               {#if etaSelected}
                 {#if !etaR}
                   <Loading />
+                {:else}
+                  {#if etaRprog}
+                    <ETABar progress={etaRprog} size={"max-w-85"} prev={prevR} curr={station.stationName}/>
+                  {/if}
+                  <p class="inter-body text-sm">{etaR}</p>
                 {/if}
-                <p class="inter-body text-sm">{etaR}</p>
               {:else}
                 {#if !etaL}
                   <Loading />
+                {:else}
+                  {#if etaLprog}
+                    <ETABar progress={etaLprog} size={"max-w-85"} prev={prevL} curr={station.stationName}/>
+                  {/if}
+                  <p class="inter-body text-sm">{etaL}</p>
                 {/if}
-                <p class="inter-body text-sm">{etaL}</p>
               {/if}
             </div>
 
@@ -201,9 +248,6 @@
                   <p class="inter-body text-sm">No available data for this selection.</p>
                 {/if}
               {/if}
-
-
-              
             </div>
 
             <!-- DIV4 - DAILY DENSITY -->

@@ -57,12 +57,13 @@
   <div class="fixed inset-0 backdrop-blur-[2px] z-40"></div>
 
   <div
-    class={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4/5 sm:w-auto bg-gray-200 text-white text-lg rounded-lg shadow-lg p-8 z-50`}
+    class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-150 bg-gray-200 text-white text-lg rounded-lg shadow-lg p-8 z-50"
     role="alert"
   >
     <div class="flex flex-col items-center justify-center justify-between space-y-3 m-auto">
-      <div class="flex flex-row items-center justify-center justify-between space-x-6">
-        <p class="flex text-left inter-h1 font-lg text-black">Edit Post</p>
+      <p class="flex text-left inter-h1 font-lg text-black">Edit Post</p>
+      <div class="absolute top-5 right-8">
+        
         <GoToButton href={"/admin/announcements"} text={"✕"} txtColor={"text-black"} bgColor={"bg-gray-200"} hvrColor={"hover:bg-red-500"} isBold={""}/>
       </div>
 

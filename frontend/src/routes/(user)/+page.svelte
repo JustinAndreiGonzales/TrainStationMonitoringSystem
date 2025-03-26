@@ -1,5 +1,13 @@
 <script>
     import Button from '$lib/StandardButton.svelte';
+    import AnnouncementsList from '$lib/AnnouncementsListMini.svelte';
+    import Loading from '$lib/Loading.svelte';
+
+    async function fetchAnnouncements() {
+      const res = await fetch(`https://trenph.up.railway.app/api/announcements/`);
+      if (!res.ok) throw new Error("Failed to fetch announcements");
+      return await res.json();
+    }
 </script>
 
 <div class="scale-80 sm:scale-100 md:scale-100 origin-center">
@@ -19,5 +27,20 @@
             <Button src="/c.png" text="View station" href="/stations" />
             <Button src="/d.png" text="Determine route" href="/routes" />
         </div>
+
+        {#await fetchAnnouncements()}
+            <div class="mt-5">
+                <Loading />
+            </div>
+        {:then announcements}
+        <div class="scale-75 -mt-2">
+            <div class="h-100 overflow-y-auto border-2 border-gray-200 rounded-lg py-10">
+                <AnnouncementsList max={announcements.count} posts={announcements.results} href={'/announcements'}/>
+            </div>
+        </div>
+        {:catch error}
+            <br>
+        {/await}
+    
     </div>
 </div>

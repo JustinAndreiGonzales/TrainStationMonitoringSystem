@@ -4,6 +4,7 @@
   import Checkbox from '$lib/Checkbox.svelte';
   import List from '$lib/dummy/FooList.svelte';
   import Checkbox2 from '$lib/Checkbox2.svelte'
+  import EtaBar from '$lib/ETABar.svelte';
 
   let eta = '';
   let time = '';
@@ -91,4 +92,7 @@
 <br> 
 <br> 
 <List />
+<br>
+
+<EtaBar size={"max-w-md"} progress={"100%"}/>
 

@@ -1,4 +1,6 @@
 <script>
+  import { onMount, onDestroy } from 'svelte';
+
   export let selected = [];
   export let disabled = false;
 
@@ -14,16 +16,28 @@
     open = !open;
   }
 
+  let dropdownRef;
+  function handleClickOutside(event) {
+    if (dropdownRef && !dropdownRef.contains(event.target)) {
+      open = false;
+      openParent = null;
+    }
+  }
+
+  onMount(() => {
+    document.addEventListener('click', handleClickOutside);
+  });
   let openParent = null;
 
   function toggleChildren(parentId) {
+    event.stopPropagation();
     openParent = openParent === parentId ? null : parentId;
   }
 </script>
 
 {#if !options.length}
   <button
-      class="text-neutral-500 outline-gray-500 text-sm inter-body rounded-bl-lg px-4 py-2 inline-flex items-center border-r border-gray-300"
+      class="text-neutral-500 outline-gray-500 text-sm inter-body min-h-13 rounded-bl-lg px-4 py-2 inline-flex items-center border-r border-gray-300"
       type="button"
       disabled={true}
     >
@@ -33,10 +47,10 @@
     </svg>
   </button>
 {:else}
-<div class="relative inline-block text-left">
+<div class="relative inline-block text-left" bind:this={dropdownRef}>
   <button
     on:click={toggleDropdown}
-    class="text-neutral-500 outline-gray-500 hover:bg-gray-200 text-sm inter-body rounded-bl-lg px-4 py-2 inline-flex items-center border-r border-gray-300"
+    class="text-neutral-500 outline-gray-500 hover:bg-gray-200 text-sm inter-body min-h-13 rounded-bl-lg px-4 inline-flex items-center h-full border-r border-gray-300"
     type="button"
     disabled={disabled}
   >
@@ -53,12 +67,12 @@
   </button>
 
   {#if open}
-    <div class="absolute mt-2 z-10 w-56 bg-white divide-y divide-gray-100 rounded-lg shadow-sm">
+      <div class="absolute mt-2 z-10 w-56 bg-white divide-y divide-gray-100 rounded-lg shadow-sm max-h-60 overflow-y-auto">
       <ul class="p-3 space-y-3 text-sm text-gray-700">
         {#each options as option}
           <li class="group">
             <div class="flex items-center justify-between hover:bg-gray-100 rounded p-1">
-              <div class="flex items-center">
+              <button class="flex items-center" on:click={() => option.checked = !option.checked}>
                 <input
                   id={option.id}
                   type="checkbox"
@@ -68,7 +82,7 @@
                 <label for={option.id} class="ms-2 text-sm inter-body font-medium text-gray-900">
                   {option.label}
                 </label>
-              </div>
+              </button>
               {#if option.children}
                 <button
                   on:click={() => toggleChildren(option.id)}

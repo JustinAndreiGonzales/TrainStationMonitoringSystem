@@ -70,9 +70,14 @@
 
     return notEmpty;
   }
+
+  function postBoxOverflow() {
+    if (edit) return "mb-[-7px]";
+    return "mb-[-6px]";
+  }
 </script>
 
-<div class="flex flex-col items-center justify-center space-y-4">
+<div class="flex flex-col items-center justify-center space-y-4 w-full">
   <div class="border border-gray-300 rounded-lg w-full max-w-200 bg-white">
     <input
       type="text"
@@ -83,7 +88,7 @@
     />
     <textarea
       placeholder="Body"
-      class="w-full h-auto px-4 py-2 mb-[-6px] text-gray-900 focus:outline-gray-500 text-sm inter-body resize-none border-b border-gray-300"
+      class="w-full h-auto px-4 py-2 {postBoxOverflow()} text-gray-900 focus:outline-gray-500 text-sm inter-body resize-none border-b border-gray-300"
       rows={5}
       bind:value={body}
       disabled={disabled}
@@ -97,9 +102,11 @@
       {:else if !tags.length}
         <p class="text-gray-400 text-[12px] inter-body">Select tags</p>
       {:else}
+        <div class="flex flex-row space-x-3 w-full overflow-x-auto whitespace-nowrap">
         {#each tags as t}
-          <p class="bg-gray-400 text-white px-3 py-1 rounded-sm text-[12px] inter-body">{t}</p>
+          <p class="bg-gray-400 text-white my-1.5 px-3 py-1 rounded-sm text-[12px] inter-body">{t}</p>
         {/each} 
+        </div>
       {/if}
     </div>
   </div>
