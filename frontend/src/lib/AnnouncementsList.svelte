@@ -1,6 +1,7 @@
 <script>
   import Post from "$lib/Post.svelte";
   import Loading from "$lib/Loading.svelte";
+  import Popup from "$lib/Popup.svelte";
   import PostPopup from "$lib/PostPopup.svelte";
   import { formatDateTime } from "./formatDateTime";
 
@@ -13,22 +14,34 @@
   let allPosts = [...posts];
   let newPosts = [];
   let isLoading = false;
+  let err = '';
 
   async function updatePosts() {
     isLoading = true;
     
     try {
       const res = await fetch(`https://trenph.up.railway.app/api/announcements/?format=json&offset=${offset}&limit=5`);
-      if (!res.ok) throw new Error("Failed to load more posts");
+      if (!res.ok) throw new Error("Error! Failed to load more posts");
 
       const fetchedPosts = await res.json();
       newPosts = fetchedPosts.results;
       offset += 5; 
     } catch (error) {
-      console.error("Error fetching posts:", error);
       offset -= 5; 
     } finally {
       isLoading = false;
+    }
+  }
+
+  async function editPost(event) {
+    //const res = await fetch(`https://httpstat.us/500`);
+    const res = await fetch(`https://trenph.up.railway.app/api/announcements/?format=json`);
+
+    if(!res.ok) {
+      err = 'Error! Cannot access announcement';
+    }
+    else {
+      postData = event.detail;
     }
   }
 
@@ -57,7 +70,7 @@
       date={formatDateTime(p.datetimePosted).date}
       admin={admin}
       tags={p.tags}
-      on:openPost={(e) => postData = e.detail}
+      on:openPost={(e) => editPost(e)}
       on:deletePost={(e) => postDelete = e.detail}
     />
   {/each}
@@ -86,6 +99,11 @@
     {/if}
   {/if}
 </div>
+
+
+{#if err}
+  <Popup message={err} href={"/admin/home"} text={"✕"} />
+{/if}
 
 {#if postData}
   <PostPopup 
