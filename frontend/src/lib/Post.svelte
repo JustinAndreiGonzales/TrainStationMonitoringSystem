@@ -62,8 +62,8 @@
     
   </div>
 
-  <!-- UPDATE TO IMG -->
-  <div class="flex-row inter-body space-y-2 min-w-145"> 
+  <!-- UPDATE TO IMG min-w-145 -->
+  <div class="flex-row inter-body space-y-2 min-w-75 sm:min-w-145"> 
     <p class="text-md">{body}</p>
     {#if imgSrc}
       <p>{imgSrc}</p>

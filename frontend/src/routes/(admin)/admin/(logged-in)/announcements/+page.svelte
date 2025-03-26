@@ -20,7 +20,8 @@
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        author: localStorage.getItem('username'),
+        // author: localStorage.getItem('username'),
+        author: 'admin',
         subject: subject,
         body: body,
         tags: tags,

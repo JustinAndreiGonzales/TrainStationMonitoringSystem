@@ -42,10 +42,10 @@
   let postDelete = null;
 </script>
 
-<div class="flex flex-col items-center space-y-7 pb-25 sm:mx-20">
+<div class="flex flex-col items-center max-h-screen space-y-7 mx-20">
   {#each allPosts as p, i}
     {#if i > 0}
-      <hr class="w-full h-[0.5px] bg-gray-200 border-0 max-w-200">
+      <hr class="h-[0.5px] bg-gray-200 border-0 max-w-200">
     {/if}
 
     <Post 
@@ -72,17 +72,19 @@
           on:click={navigate}
           disabled={isLoading}
         >
-          Load more ↓
+          Load more →
         </button>
+        <p class="text-white text-[5px]">...</p>
       {:else}
         <button
-          class="max-w-sm mx-auto bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded inter-body text-[13px]"
+          class="max-w-sm mx-auto bg-gray-200 hover:bg-gray-300 pt-2 px-4 rounded inter-body text-[13px]"
           on:click={updatePosts}
           disabled={isLoading}
         >
           Load more ↓
         </button>
       {/if}
+      <br>
     {/if}
   {/if}
 </div>
