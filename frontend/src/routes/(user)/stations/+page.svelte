@@ -51,7 +51,7 @@
           etaLprog = String(Number((20 - Number(etaL)) / 20 * 100)) + "%";
           
           if (Number(etaL) == 0) {
-            etaL = "Train is stopping..."
+            etaL = "Train has arrived!"
           }
           else if (Number(etaL) > 1) {
             etaL = etaL + " mins left"
@@ -76,7 +76,7 @@
           etaRprog = String(Number((20 - Number(etaR)) / 20 * 100)) + "%";
 
           if (Number(etaR) == 0) {
-            etaR = "Train is stopping..."
+            etaR = "Train has arrived!"
           }
           else if (Number(etaR) > 1) {
             etaR = etaR + " mins left"
