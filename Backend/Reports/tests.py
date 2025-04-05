@@ -3,6 +3,7 @@ from rest_framework import status
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import connection
 from unittest.mock import patch
 
@@ -132,3 +133,51 @@ class TestReportSubmissionView(APITestCase):
 
         self.assertEqual(res.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
         self.assertEqual(res.data, {"error": "Database is currently unavailable."})
+
+class TestReportDeletionView(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username = 'testuser',
+            password = 'password',
+            role = 'admin'
+        )
+
+        self.report = Reports.objects.create(
+            subject='Test Report',
+            station='LRT-1',
+            body= "Hello testing",
+        )
+
+        refresh = RefreshToken.for_user(self.user)
+        self.token = str(refresh.access_token)
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
+
+    def test_delete_report(self):
+        url = reverse('report-delete', args=[self.report.id])
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Reports.objects.filter(id=self.report.id).exists())
+
+    def test_delete_nonexistent_report(self):
+        url = reverse('report-delete', args=[999])
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    @patch("Reports.views.check_database_status")
+    def test_no_db_connection(self, mock_check_db_status):
+        mock_check_db_status.return_value = False
+        url = reverse('report-delete', args=[self.report.id])
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
+        self.assertEqual(res.data, {"error": "Database is currently unavailable."})
+
+    def test_delete_without_authentication(self):
+        self.client.credentials()
+        url = reverse('report-delete', args=[self.report.id])
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
