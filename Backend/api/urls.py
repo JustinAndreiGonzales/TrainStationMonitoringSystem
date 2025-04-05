@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenBlacklistView
 from Station.views import get_all_station, get_station, ProtectedView, get_cctv_feed, get_hourly_density, get_daily_density, get_current_density
 from Users.views import SignUpView, CustomTokenObtainPairView
 from Announcements.views import AnnouncementListView, AnnouncementCreateView, AnnouncementUpdateView
-from Reports.views import ReportsListView, ReportSumbitView
+from Reports.views import ReportsListView, ReportSumbitView, ReportDeleteView
 from RouteFinding.views import route_finding
 
 urlpatterns = [
@@ -36,6 +36,7 @@ urlpatterns = [
     path('reports/', ReportsListView.as_view(), name='reports'),
     # GET /reports/?limit=3&offset=0 (limit - # to get, offset - index to start)
     path('reports/create/', ReportSumbitView.as_view(), name='report-submission'),
+    path('reports/delete/<int:id>/', ReportDeleteView.as_view(), name='report-delete'),
 
     # calculator
     path('route/<int:src>/<int:dest>/', route_finding, name='route-finding'),

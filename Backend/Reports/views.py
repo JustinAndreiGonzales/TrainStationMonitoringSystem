@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.db import connection, OperationalError
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import get_object_or_404
 
 from .models import Reports
 from .serializers import ReportsSerializer
@@ -51,3 +52,18 @@ class ReportSumbitView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ReportDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, id):
+        if not check_database_status():
+            return Response(
+                {"error": "Database is currently unavailable."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        
+        report = get_object_or_404(Reports, id)
+        report.delete()
+        return Response({"message": "Report deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
