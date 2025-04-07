@@ -64,6 +64,6 @@ class ReportDeleteView(APIView):
                 status=status.HTTP_503_SERVICE_UNAVAILABLE
             )
         
-        report = get_object_or_404(Reports, id)
+        report = get_object_or_404(Reports, id=id)
         report.delete()
         return Response({"message": "Report deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
