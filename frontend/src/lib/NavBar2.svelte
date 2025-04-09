@@ -12,7 +12,7 @@
   // FIX: icon sizes
   let links = [
     { name: "Home", href: "/admin/home", img: "/a.png" },
-    { name: "Create account", href: "/admin/create-account", img: "/b.png" }, 
+    { name: "Create account", href: "/admin/create-account", img: "/h.png" }, 
     { name: "Announcements", href: "/admin/announcements", img: "/b.png" },
     { name: "Reports", href: "/admin/reports", img: "/f.png" },
     { name: "Log out", href: "/admin", img: "/g.png" },  ];

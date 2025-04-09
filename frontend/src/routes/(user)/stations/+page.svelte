@@ -35,14 +35,9 @@
     loading = false;
     
     if (id) {
+      //const sock = new WebSocket(`wss://trensimph.up.railway.app/ws/simulator/`);
       const sockL = new WebSocket(`wss://trenph.up.railway.app/ws/eta/${id}/left/`);
       const sockR = new WebSocket(`wss://trenph.up.railway.app/ws/eta/${id}/right/`);
-
-      /*
-      sockL.onopen = () => {
-        console.log("Receiving ETA left details...");
-      };
-      */
 
       sockL.onmessage = (event) => {
         // console.log('L: ', event.data);
@@ -62,12 +57,6 @@
           }
         }
       };
-
-      /*
-      sockR.onopen = () => {
-        console.log("Receiving ETA right details...");
-      };
-      */
 
       sockR.onmessage = (event) => {
         // console.log('R: ', event.data);
@@ -91,6 +80,7 @@
       return () => {
         sockL.close();
         sockR.close();
+        //sock.close();
       };
     }
   });
@@ -194,7 +184,7 @@
                 alt="station"
                 class="w-full h-full object-cover"
               />
-              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 rounded-lg"></div>
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
             {:else}
               <p>hello</p>
               <div class=" w-full h-full object-cover bg-gray-200"></div>
@@ -202,7 +192,7 @@
 
             <div data-testid="station-header" class="absolute bottom-4 left-8 {station.stationImage ? "text-white" : "text-black"} text-xl font-semibold">
               <div class="flex flex-col">
-                <p class="inter-h1 text-[28px]">{station.stationName}</p>
+                <p class="inter-h1 text-[24px] sm:text-[28px]">{station.stationName}</p>
                 <p class="inter-body text-xl">{station.trainLine}</p>
               </div>
             </div>
