@@ -2,8 +2,9 @@
   import DropdownStations2 from '$lib/DropdownStations2.svelte';
   import Popup from '$lib/Popup.svelte';
   import Loading from '$lib/Loading.svelte';
-  import trainMap from '$lib/images/train_map.png';
   import { onMount } from 'svelte';
+
+  const trainMap = "https://iqbsmjbstzitakmfcmdo.supabase.co/storage/v1/object/public/stationimages//trainstations.jpg";
 
   let start = '';
   let end = '';
@@ -153,7 +154,7 @@ const stops = (num) => {
 
       <br>
       <div class="flex justify-center items-center">
-          <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] h-auto rounded-lg">
+          <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] object-cover h-90 rounded-lg">
       </div>
 
       <br>

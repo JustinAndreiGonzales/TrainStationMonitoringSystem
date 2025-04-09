@@ -26,7 +26,7 @@
 </script>
 
 <form class="max-w-sm mx-auto">
-  <label for="stations" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white inter-h2">
+  <label for="stations" class="block mb-2 text-sm font-medium text-gray-900 inter-h2">
     Select station
   </label>
 
@@ -34,7 +34,7 @@
     <div class="w-25">
       <select
         id="train-lines"
-        class="inter-body bg-gray-50 border border-gray-300 text-gray-900 text-[13px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="inter-body bg-gray-50 border border-gray-300 text-gray-900 text-[13px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         bind:value={selectedTrainLine}
       >
         <option value="" selected>Line</option>
@@ -47,7 +47,7 @@
     <div class="w-75">
       <select
         id="stations"
-        class="inter-body bg-gray-50 border border-gray-300 text-gray-900 text-[13px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="inter-body bg-gray-50 border border-gray-300 text-gray-900 text-[13px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         bind:value={selectedStation}
         disabled={!selectedTrainLine}
       >

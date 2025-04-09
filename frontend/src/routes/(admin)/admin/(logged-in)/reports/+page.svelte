@@ -10,6 +10,8 @@
   let boo = false;
   let current = 5;
   let filters = [];
+  let result = '';
+  let readyToDel = 1;
 
   function toggleLoad() {
     boo = !boo;
@@ -107,7 +109,7 @@
       <Checkbox bind:selected={filters} />
     </div>
     <div class="flex flex-col items-center justify-center">
-      <ReportsList posts={allData} filters={filters} />
+      <ReportsList posts={allData} filters={filters} bind:result={result} />
         {#if url != null}
         <button
           class="max-w-sm bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded inter-body text-[13px] -mt-17 mb-24"
@@ -139,3 +141,13 @@
     {/await}
   {/if}
 {/await}
+
+{#if result}
+<div class="fixed inset-0 z-50 flex items-center justify-center">
+  {#if result.includes("Error!")}
+      <Popup message={result} href={"/admin/home"} text={"✕"} />
+    {:else}
+      <Popup message={result} href={"/admin/reports"} text={"✕"} color="bg-green-700" txtColor="text-green-700" />
+    {/if}
+</div>
+{/if}

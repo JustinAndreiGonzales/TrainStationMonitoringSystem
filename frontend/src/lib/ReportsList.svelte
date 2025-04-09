@@ -2,11 +2,13 @@
   import Post from "$lib/Post.svelte";
   import Popup from "$lib/Popup.svelte"
   import { formatDateTime } from "./formatDateTime";
+    import { passive } from "svelte/legacy";
 
   export let current = 5;
   export let posts;
   export let filters = [];
-  let result = '';
+  export let readyToDel = 1;
+  export let result = '';
 
   $: current = current;
   $: filteredPosts = filters.length ? posts.filter(post => post.station.split(',').some(tag => filters.includes(tag))) : posts;
@@ -32,7 +34,6 @@
 
 
 <div class="flex flex-col items-center min-h-screen space-y-7 pb-25">
-
   {#if !filteredPosts.length}
     <p class="text-sm inter-body">No available reports for selected filters.</p>
   {/if}
@@ -55,7 +56,3 @@
     {/if}
   {/each}
 </div>
-
-{#if result}
-  <Popup message={result} href={"/admin/reports"} text={"✕"} />
-{/if}

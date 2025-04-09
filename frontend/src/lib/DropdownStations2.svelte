@@ -29,7 +29,7 @@
 <div class="flex items-end justify-center space-x-3 max-w-sm w-full max-h-sm">
   <div class="flex flex-col flex-grow space-y-2">
     <form class="w-full flex flex-col space-y-2">
-      <label for="stations1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white inter-h2">
+      <label for="stations1" class="block mb-2 text-sm font-medium text-gray-900 inter-h2">
         Start station
       </label>
 
@@ -64,7 +64,7 @@
     </form>
 
     <form class="w-full flex flex-col space-y-2">
-      <label for="stations2" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white inter-h2">
+      <label for="stations2" class="block mb-2 text-sm font-medium text-gray-900 inter-h2">
         End station
       </label>
 

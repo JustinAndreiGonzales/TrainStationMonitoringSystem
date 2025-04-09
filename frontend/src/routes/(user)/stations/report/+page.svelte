@@ -12,6 +12,7 @@
 
   let loading = true;
   let error = '';
+  let submitted = false;
   
   onMount(() => {
       const url = new URL(window.location.href);
@@ -32,32 +33,36 @@
   }
   
   async function postReport(station, line) {
-    if (subject && body) {
-      const res = await fetch('https://trenph.up.railway.app/api/reports/create/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          subject: subject,
-          station: line + ',' + station,
-          body: body,
-        })  
-      })
+    if (!submitted) {
+      if (subject && body) {
+        submitted = true;
 
-      if (!res.ok) {
-        error = 'Error! No database connection'
+        const res = await fetch('https://trenph.up.railway.app/api/reports/create/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subject: subject,
+            station: line + ',' + station,
+            body: body,
+          })  
+        })
+
+        if (!res.ok) {
+          error = 'Error! No database connection'
+        }
+        else {
+          error = 'done';
+        }
+      }
+      else if (!subject && !body){
+        error = 'both'
+      }
+      else if (!subject){
+        error = 'title'
       }
       else {
-        error = 'done';
+        error = 'details'
       }
-    }
-    else if (!subject && !body){
-      error = 'both'
-    }
-    else if (!subject){
-      error = 'title'
-    }
-    else {
-      error = 'details'
     }
   }
 </script>
@@ -93,7 +98,7 @@
 
       {#if error }
         {#if error == 'done'}
-          <Popup message={"Report has been submitted successsfully!"} color='bg-green-700' txtColor='text-green-600' href={`/`} text={"✕"} />
+          <Popup message={"Report has been submitted successsfully!"} color='bg-green-700' txtColor='text-green-600' href={`/stations/${id}`} text={"✕"} />
         {:else if error != 'title' && error != 'details' && error != 'both'}
           <Popup message={error} href={`/`} text={"✕"} />
         {:else}

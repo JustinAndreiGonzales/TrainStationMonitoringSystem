@@ -1,7 +1,6 @@
 <script lang="ts">
   import DropdownStations from '$lib/DropdownStations.svelte';
   import Popup from '$lib/Popup.svelte';
-  import trainMap from '$lib/images/train_map.png';
   import GoToButton from '$src/lib/GoToButton.svelte';
   import Loading from '$lib/Loading.svelte';
   import RadioButton from '$lib/RadioButton.svelte';
@@ -9,8 +8,10 @@
   import Chartt from '$lib/Chartt.svelte';
   import ETABar from '$lib/ETABar.svelte';
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
 
-  export let params;
+
+  const trainMap = "https://iqbsmjbstzitakmfcmdo.supabase.co/storage/v1/object/public/stationimages//trainstations.jpg";
 
   let id = '';
   let loading = true;
@@ -184,21 +185,41 @@
       {/await}
     {:then station}
       {#if station.isOperating}
-        <div class="scale-70 sm:scale-100 sm:mb-20 origin-top mt-6">
-          <div class="flex flex-col justify-center items-center space-y-5">
-            <!-- DIV1 - HEADER -->
-            <div data-testid="station-header" class="flex flex-row items-center justify-between bg-gray-200 rounded-lg w-110 p-5">
-              <div class="flex flex-col">
-                <p class="inter-h1 text-2xl">{station.stationName}</p>
-                <p class="inter-body text-2xl">{station.trainLine}</p>
-              </div>
-              
-              <div class="mr-[-1px]">
-                <GoToButton text="Report an Issue" href={`/stations/report?id=${station.id}`} />
-              </div>
-            </div>       
+        <div class="sm:mb-20 origin-top">
+          <!-- DIV0 - HEADER -->
+          <div class="relative w-full h-64">
+            {#if station.stationImage}
+              <img
+                src={station.stationImage}
+                alt="station"
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 rounded-lg"></div>
+            {:else}
+              <p>hello</p>
+              <div class=" w-full h-full object-cover bg-gray-200"></div>
+            {/if}
 
-            <!-- DIV2 - ETA -->
+            <div data-testid="station-header" class="absolute bottom-4 left-8 {station.stationImage ? "text-white" : "text-black"} text-xl font-semibold">
+              <div class="flex flex-col">
+                <p class="inter-h1 text-[28px]">{station.stationName}</p>
+                <p class="inter-body text-xl">{station.trainLine}</p>
+              </div>
+            </div>
+  
+            <div data-testid="report" class="absolute bottom-4 right-8 text-white inter-body text-[12px]">
+              <button class="flex flex-col justify-end items-center bg-red-500 px-2 py-1.5 rounded-lg hover:bg-red-700" on:click={() => goto(`/stations/report?id=${station.id}`)}>
+                <svg class="w-7 h-7 fill-white mb-0.5" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M512 32a480 480 0 1 0 480 480A480 480 0 0 0 512 32z m0 194.24a64 64 0 0 1 64 64c0 81.28 1.92 26.24-11.52 276.48a53.44 53.44 0 0 1-106.88 0c-13.44-248.32-11.52-192-11.52-276.48a64 64 0 0 1 65.92-64z m0 571.52a70.08 70.08 0 1 1 70.4-70.4 70.08 70.08 0 0 1-70.4 70.4z"/></svg>
+                Report
+                <!--
+                <GoToButton text="Report" href={`/stations/report?id=${station.id}`} />
+                -->
+              </button>
+            </div>
+          </div>
+
+          <div class="flex flex-col scale-75 sm:scale-100 mt-5 origin-top justify-center items-center space-y-5">
+            <!-- DIV1 - ETA -->
             <div data-testid="eta" class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
               <p class="inter-h1 text-lg">Next Train ETA</p>
               <div class="flex w-full scale-85">
@@ -212,7 +233,7 @@
                   {#if etaRprog}
                     <ETABar progress={etaRprog} size={"max-w-85"} prev={prevR} curr={station.stationName}/>
                   {/if}
-                  <p class="inter-body text-sm">{etaR}</p>
+                  <p class="inter-h1 text-xl">{etaR}</p>
                 {/if}
               {:else}
                 {#if !etaL}
@@ -221,12 +242,12 @@
                   {#if etaLprog}
                     <ETABar progress={etaLprog} size={"max-w-85"} prev={prevL} curr={station.stationName}/>
                   {/if}
-                  <p class="inter-body text-sm">{etaL}</p>
+                  <p class="inter-h1 text-xl">{etaL}</p>
                 {/if}
               {/if}
             </div>
 
-            <!-- DIV3 - CURRENT DENSITY -->
+            <!-- DIV2 - CURRENT DENSITY -->
             <div data-testid="current-density" class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
               <p class="inter-h1 text-lg">Current Density</p>
               <div class="flex w-full scale-85">
@@ -235,14 +256,14 @@
 
               {#if currentSelected}
                 {#if station.rightCCTV}
-                  <p class="inter-body text-sm">{station.rightCurrentDensity}</p>
+                  <p class="inter-h1 text-2xl">{station.rightCurrentDensity}</p>
                   <GoToButton text="View CCTV" href={`/stations/cctv?id=${station.id}&stream=${currentSelected+1}`}/>
                 {:else}
                   <p class="inter-body text-sm">No available data for this selection.</p>
                 {/if}  
               {:else}
                 {#if station.leftCCTV}
-                  <p class="inter-body text-sm">{station.leftCurrentDensity}</p>
+                  <p class="inter-h1 text-2xl">{station.leftCurrentDensity}</p>
                   <GoToButton text="View CCTV" href={`/stations/cctv?id=${station.id}&stream=${currentSelected+1}`}/>
                 {:else}
                   <p class="inter-body text-sm">No available data for this selection.</p>
@@ -250,7 +271,7 @@
               {/if}
             </div>
 
-            <!-- DIV4 - DAILY DENSITY -->
+            <!-- DIV3 - DAILY DENSITY -->
             <div data-testid="daily-density" class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
               <p class="inter-h1 text-lg">Daily Density</p>
 
@@ -278,7 +299,7 @@
               {/await}              
             </div>
             
-            <!-- DIV5 - HOURLY DENSITY -->
+            <!-- DIV4 - HOURLY DENSITY -->
             <div data-testid="hourly-density" class="flex flex-col items-center justify-center bg-gray-200 rounded-lg w-110 p-5 space-y-2">
               <p class="inter-h1 text-lg">Hourly Density</p>
 
@@ -315,7 +336,7 @@
         
           <br>
           <div class="flex justify-center items-center">
-            <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] h-auto rounded-lg">
+            <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] object-cover h-90 rounded-lg">
           </div>
 
           <br>
@@ -339,7 +360,7 @@
         <br>
     
         <div class="flex justify-center items-center">
-            <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] h-auto rounded-lg">
+            <img src={trainMap} alt="Train Map" class="max-w-full w-[385px] object-cover h-90 rounded-lg">
         </div>
     
         <br>

@@ -8,6 +8,7 @@
     let role = '';
 
     let result = '';
+    let submitted = false;
 
     const validUser = () => {
         const pattern = /^[\w.@+-]+$/;
@@ -30,26 +31,27 @@
     $: eqPass = (password === confirmPW);
 
     async function createAccount() {
-        console.log('work!');
-        const res = await fetch('https://trenph.up.railway.app/api/signup/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-            username: username,
-            email: email,
-            role: role,
-            password: password,
-            })  
-        });
+        if(!submitted) {
+            submitted = true;
+            const res = await fetch('https://trenph.up.railway.app/api/signup/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                username: username,
+                email: email,
+                role: role,
+                password: password,
+                })  
+            });
 
-        if (!res.ok) {
-            result = 'Error! No database connection';
+            if (!res.ok) {
+                result = 'Error! No database connection';
+            }
+            else {
+                result = 'Account has been successfully created!';
+            } 
+
         }
-        else {
-            result = 'Account has been successfully created!';
-        } 
-
-        console.log(result);
     }
 </script>
 
