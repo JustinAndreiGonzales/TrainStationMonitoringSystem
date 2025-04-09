@@ -2,12 +2,14 @@
   import ReportsList from '$lib/ReportsList.svelte'
   import Popup from '$lib/Popup.svelte'
   import Loading from '$lib/Loading.svelte'
+  import Checkbox from '$lib/Checkbox3.svelte';
   import { onMount } from 'svelte';
 
   let allData = [];
   let url = 'https://trenph.up.railway.app/api/reports/?format=json';
   let boo = false;
   let current = 5;
+  let filters = [];
 
   function toggleLoad() {
     boo = !boo;
@@ -82,21 +84,30 @@
 <title>Reports | Train Station Monitoring System</title>
 
 {#await fetchReports()}
-  <div class="flex scale-80 flex-col items-center justify-center sm:scale-100 md:scale-100 origin-top mt-6 space-y-7">
-    <h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Reports</h1>
+  <div class="flex-col items-center scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-7 mx-20">  
+    <div class="flex flex-col items-center justify-center inter-h1 text-3xl origin-top mt-6 space-y-2">
+      <h1>Reports</h1>
+      <Checkbox disabled={true}/>
+    </div>
     <Loading />
   </div>
-{:catch error}
-  <div class="flex scale-80 flex-col items-center justify-center sm:scale-100 md:scale-100 origin-top mt-6 space-y-7">
-    <h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Reports</h1>
+{:catch e}
+  <div class="flex-col items-center scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-7 mx-20">  
+    <div class="flex flex-col items-center justify-center inter-h1 text-3xl origin-top mt-6 space-y-2">
+      <h1>Reports</h1>
+      <Checkbox disabled={true}/>
+    </div>
   </div>
   <Popup message={"Error! No database connection"} href={"/admin/home"} text={"✕"} />
 {:then token}
   {#if !boo}
-  <div class="flex scale-80 flex-col items-center justify-center sm:scale-100 md:scale-100 origin-top mt-6 space-y-7">
-    <h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Reports</h1>
+  <div class="flex-col items-center scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-7 mx-20">  
+    <div class="flex flex-col items-center justify-center inter-h1 text-3xl origin-top mt-6 space-y-2">
+      <h1>Reports</h1>
+      <Checkbox bind:selected={filters} />
+    </div>
     <div class="flex flex-col items-center justify-center">
-      <ReportsList posts={allData} />
+      <ReportsList posts={allData} filters={filters} />
         {#if url != null}
         <button
           class="max-w-sm bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded inter-body text-[13px] -mt-17 mb-24"
@@ -109,10 +120,13 @@
   </div>
   {:else}
     {#await fetchMoreReports()}
-    <div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-7">
-      <h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Reports</h1>
-      
-      <ReportsList posts={allData} />
+    <div class="flex-col items-center scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-7 mx-20">  
+      <div class="flex flex-col items-center justify-center inter-h1 text-3xl origin-top mt-6 space-y-2">
+        <h1>Reports</h1>
+        <Checkbox bind:selected={filters}/>
+      </div>
+
+      <ReportsList posts={allData} filters={filters} />
       <div class="-mt-25 mb-24">
         <Loading />
       </div>

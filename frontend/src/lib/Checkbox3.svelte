@@ -11,6 +11,36 @@
     ...(opt.children ? opt.children.filter(c => c.checked).map(c => c.label) : [])
   ]);
 
+  async function fetchTagChoices() {
+      const res = await fetch(`https://trenph.up.railway.app/api/station/?format=json`);
+      if (!res.ok) throw new Error("Failed to fetch stations");
+
+      const data = await res.json();
+      data.sort((a, b) => a.id - b.id);
+
+      const stations = ['LRT1', 'LRT2', 'MRT3'];
+      let fetchedOptions = [];
+
+      stations.forEach(line => {
+        let c = data
+          .filter(d => d.trainLine === line)
+          .map(station => ({
+            id: String(station.id),
+            label: station.stationName,
+            checked: selected.includes(station.stationName)
+          }));
+        
+        fetchedOptions.push({
+          id: line,
+          label: line,
+          checked: selected.includes(line),
+          children: c
+        });
+      });
+
+      options = [...fetchedOptions];
+    }
+
   let open = false;
   function toggleDropdown() {
     open = !open;
@@ -26,6 +56,7 @@
 
   onMount(() => {
     document.addEventListener('click', handleClickOutside);
+    fetchTagChoices();
   });
   let openParent = null;
 
@@ -38,11 +69,18 @@
 <div class="relative inline-block text-left" bind:this={dropdownRef}>
   <button
     on:click={toggleDropdown}
-    class="text-neutral-500 outline-gray-500 {!options.length ? "" : "hover:bg-gray-200"} text-sm inter-body min-h-13 rounded-bl-lg px-4 inline-flex items-center h-full border-r border-gray-300"
+    class="text-black {options.length && !disabled ? "hover:bg-gray-200" : ""} text-sm inter-body rounded-lg px-4 py-2 inline-flex items-center border-1 border-neutral-300"
     type="button"
     disabled={disabled || !options.length}
   >
-    Tags
+    Filter
+
+    {#if selected.length}
+      <span class="text-white ml-1.5 text-[10px] bg-blue-600 rounded-full w-5 h-5 flex items-center justify-center">
+        {selected.length}
+      </span>
+    {/if}
+
     <svg class="w-2.5 h-2.5 ms-3 {open ? "rotate-180" : ""}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
     </svg>

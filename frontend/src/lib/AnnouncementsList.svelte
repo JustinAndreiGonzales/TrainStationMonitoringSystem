@@ -7,8 +7,9 @@
 
   export let max;
   export let posts;
-  export let admin = false;
+  export let admin = 3;
   export let href = '';
+  export let filters = [];
 
   let offset = posts.length;
   let allPosts = [...posts];
@@ -50,30 +51,35 @@
   }
 
   $: allPosts = [...allPosts, ...newPosts]
+  $: filteredPosts = filters.length ? allPosts.filter(post => post.tags.some(tag => filters.includes(tag))) : allPosts
 
   let postData = null;
   let postDelete = null;
 </script>
 
 <div class="flex flex-col items-center space-y-7 pb-25 sm:mx-20">
-  {#each allPosts as p, i}
-    {#if i > 0}
-      <hr class="w-full h-[0.5px] bg-gray-200 border-0 max-w-200">
-    {/if}
+  {#each filteredPosts as p, i}
+      {#if i > 0}
+        <hr class="w-full h-[0.5px] bg-gray-200 border-0 max-w-200">
+      {/if}
 
-    <Post 
-      id={p.id}
-      subject={p.subject}
-      author={p.author}
-      body={p.body} 
-      time={formatDateTime(p.datetimePosted).time} 
-      date={formatDateTime(p.datetimePosted).date}
-      admin={admin}
-      tags={p.tags}
-      on:openPost={(e) => editPost(e)}
-      on:deletePost={(e) => postDelete = e.detail}
-    />
+      <Post 
+        id={p.id}
+        subject={p.subject}
+        author={p.author}
+        body={p.body} 
+        time={formatDateTime(p.datetimePosted).time} 
+        date={formatDateTime(p.datetimePosted).date}
+        admin={admin}
+        tags={p.tags}
+        on:openPost={(e) => editPost(e)}
+        on:deletePost={(e) => postDelete = e.detail}
+      />
   {/each}
+
+  {#if !filteredPosts.length && !isLoading}
+    <p class="inter-body text-sm">No available posts with selected filters.{offset < max ? " Try loading more to view them." : ""}</p>
+  {/if}
 
   {#if isLoading}
     <Loading />

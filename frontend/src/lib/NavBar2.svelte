@@ -1,6 +1,8 @@
 <script>
   import { page } from "$app/stores";
   import { goto } from '$app/navigation';
+  
+  export let superAdmin = false;
 
   async function logout() {
         await fetch('/admin', { method: 'DELETE' }); 
@@ -10,8 +12,7 @@
   // FIX: icon sizes
   let links = [
     { name: "Home", href: "/admin/home", img: "/a.png" },
-    // ADD: when ready
-    /* { name: "Create account", href: "/admin/create-account", img: "/e.png" }, */
+    { name: "Create account", href: "/admin/create-account", img: "/b.png" }, 
     { name: "Announcements", href: "/admin/announcements", img: "/b.png" },
     { name: "Reports", href: "/admin/reports", img: "/f.png" },
     { name: "Log out", href: "/admin", img: "/g.png" },  ];
@@ -42,7 +43,8 @@
 <!-- DISABLE create account -->
 <footer class="fixed bottom-0 w-full bg-blue-700 shadow-inner ">
   <ul class="flex justify-around list-none m-0 p-0 mt-1">
-    {#each links as link}
+    {#each links as link, i}
+      {#if i != 1 || superAdmin}
       <li class="flex flex-col items-center py-2">
         {#if link.name == "Log out" }
           <a href="{link.href}" 
@@ -62,6 +64,7 @@
           </a>
         {/if}
       </li>
+      {/if}
     {/each}
   </ul>
 </footer>

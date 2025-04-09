@@ -17,7 +17,8 @@
         if (result.success) {
             localStorage.setItem("jwt_token", result.token);
             localStorage.setItem("refresh_token", result.refresh);
-            localStorage.setItem("username", result.user);
+            localStorage.setItem("username", result.username);
+            localStorage.setItem("role", result.role);
             window.location.href = '/admin/home';
         } else {
             if (result.message != "Invalid credentials") {
