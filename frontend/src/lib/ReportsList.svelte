@@ -1,33 +1,34 @@
 <script>
   import Post from "$lib/Post.svelte";
-  import Popup from "$lib/Popup.svelte"
   import { formatDateTime } from "./formatDateTime";
-    import { passive } from "svelte/legacy";
 
   export let current = 5;
   export let posts;
   export let filters = [];
-  export let readyToDel = 1;
+  export let deleted = false;
   export let result = '';
 
   $: current = current;
   $: filteredPosts = filters.length ? posts.filter(post => post.station.split(',').some(tag => filters.includes(tag))) : posts;
   
   async function deletePost(id) {
-    const token = localStorage.getItem('jwt_token');
+    if (!deleted) {
+      deleted = true;
+      const token = localStorage.getItem('jwt_token');
 
-    //const res = await fetch(`https://httpstat.us/500`);
-    console.log(id);
-    const res = await fetch(`https://trenph.up.railway.app/api/reports/delete/${id}/`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
+      //const res = await fetch(`https://httpstat.us/500`);
+      console.log(id);
+      const res = await fetch(`https://trenph.up.railway.app/api/reports/delete/${id}/`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
 
-    if(!res.ok) {
-      result = `Error! No database connnection`;
-    }
-    else {
-      result = 'Report has been successfully deleted!'
+      if(!res.ok) {
+        result = `Error! No database connnection`;
+      }
+      else {
+        result = 'Report has been successfully deleted!'
+      }
     }
   }
 </script>

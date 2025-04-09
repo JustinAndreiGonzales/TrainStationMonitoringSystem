@@ -11,7 +11,6 @@
   let current = 5;
   let filters = [];
   let result = '';
-  let readyToDel = 1;
 
   function toggleLoad() {
     boo = !boo;
