@@ -16,7 +16,7 @@ test('REPORT - double empty', async ({ page }) => {
 
     //await page.getByPlaceholder('Title').fill('Some Title');
 
-    await page.getByRole('button').click()
+    await page.getByText('Submit').click()
 
     await page.getByText ("Report is incomplete and missing both fields.")
 
@@ -27,7 +27,7 @@ test('REPORT - body empty', async ({ page }) => {
 
     await page.getByPlaceholder('Title').fill('Some Title');
 
-    await page.getByRole('button').click()
+    await page.getByText('Submit').click()
 
     await page.getByText( "Report is incomplete and missing details")
   });
@@ -37,7 +37,7 @@ test('REPORT - title empty', async ({ page }) => {
 
     await page.getByPlaceholder('Write details here...').fill('Some Details');
 
-    await page.getByRole('button').click()
+    await page.getByText('Submit').click()
 
     await page.getByText( "Report is incomplete and missing title.")
   });
@@ -50,7 +50,7 @@ test('REPORT - valid', async ({ page }) => {
     await page.getByPlaceholder('Title').fill(`Pyright Test`);
     await page.getByPlaceholder('Write details here...').fill('Some Details %s');
 
-    await page.getByRole('button').click()
+    await page.getByText('Submit').click()
 
     // let url = 'https://trenph.vercel.app/admin';
     // let user = 'admin';
@@ -61,7 +61,7 @@ test('REPORT - valid', async ({ page }) => {
     // await page.getByPlaceholder('Username').fill(user);
     // await page.getByPlaceholder('Password').fill(pw);
 
-    // await page.getByRole('button').click();
+    // await page.getByText('Submit').click();
 
     // await page.getByText('Reports').click();
 

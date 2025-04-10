@@ -62,7 +62,7 @@
         <h1 class="flex justify-center inter-h1 text-3xl origin-top mt-6">Create account</h1>
         <br>
         <div class="flex-col justify-center align-center space-x-4 space-y-3 w-100">
-            <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white inter-h2">
+            <label for="username" class="block mb-2 text-sm font-medium text-gray-900 inter-h2">
                 Username*
             </label>  
             <input type="text" id="username" bind:value={username} class="bg-gray-50 border border-gray-300 text-gray-900 text-[13px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 inter-body" placeholder="" required />
@@ -70,7 +70,7 @@
                 <p class="text-red-500 inter-body text-[12px] my=[-2px]">Username must be 150 characters or fewer. Use only letters, digits or @ . + - _.</p>
             {/if}
 
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white inter-h2">
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 inter-h2">
                 Email address
             </label>  
             <input type="text" id="email" bind:value={email} class="bg-gray-50 border border-gray-300 text-gray-900 text-[13px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 inter-body" placeholder="" />
@@ -78,7 +78,7 @@
                 <p class="text-red-500 inter-body text-[12px] my=[-2px]">Email must be a valid address.</p>
             {/if}
 
-            <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white inter-h2">
+            <label for="role" class="block mb-2 text-sm font-medium text-gray-900 inter-h2">
                 Select account role*
             </label>  
             <form class="w-full">
@@ -93,12 +93,12 @@
                 </select>
             </form>
 
-            <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white inter-h2">
+            <label for="role" class="block mb-2 text-sm font-medium text-gray-900 inter-h2">
                 Password*
             </label>  
             <input type="password" id="password" bind:value={password} class="bg-gray-50 border border-gray-300 text-gray-900 text-[13px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 inter-body toggle-password-active:hidden" placeholder="" required />
 
-            <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white inter-h2">
+            <label for="role" class="block mb-2 text-sm font-medium text-gray-900 inter-h2">
                 Confirm password*
             </label>  
             <input type="password" id="password2" bind:value={confirmPW} class="bg-gray-50 border border-gray-300 text-gray-900 text-[13px] rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 inter-body toggle-password-active:hidden" placeholder="" required />
