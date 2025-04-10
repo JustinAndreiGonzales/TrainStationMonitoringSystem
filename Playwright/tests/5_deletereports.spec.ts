@@ -20,9 +20,16 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('successful delete', async ({ page }) => {
-  await page.getByLabel("delete").first().click();
-  await page.getByText("Delete").click();
+  await page.locator('[aria-label="delete"]').first().click();
+  await page.locator('[aria-label="confirm"]').click();
   
   await expect(page.getByText('Report has been successfully submitted!')).toBeTruthy();
 });
 
+
+test('cancel delete', async ({ page }) => {
+  await page.locator('[aria-label="delete"]').first().click();
+  await page.locator('[aria-label="cancel"]').click();
+  
+  await expect(page).toBeTruthy();
+});

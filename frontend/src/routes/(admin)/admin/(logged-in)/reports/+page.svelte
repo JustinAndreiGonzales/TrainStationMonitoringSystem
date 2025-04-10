@@ -164,8 +164,8 @@
       <div class="flex flex-col items-center justify-center justify-between m-auto space-y-2.5">
         <span class="flex text-left inter-body font-xs">Are you sure you want to delete this report?</span>
         <span class="flex space-x-4 inter-body text-sm">
-          <button class="py-1.5 px-2 text-white rounded-lg bg-red-500 hover:bg-red-700" on:click={() => readyToDel = true}>Delete</button>
-          <button class="py-1.5 px-2 text-black rounded-lg bg-white hover:bg-gray-200" on:click={() => openToDel = false}>Cancel</button>
+          <button aria-label="confirm" class="py-1.5 px-2 text-white rounded-lg bg-red-500 hover:bg-red-700" on:click={() => readyToDel = true}>Delete</button>
+          <button aria-label="cancel" class="py-1.5 px-2 text-black rounded-lg bg-white hover:bg-gray-200" on:click={() => openToDel = false}>Cancel</button>
         </span>
       </div>
     </div>
