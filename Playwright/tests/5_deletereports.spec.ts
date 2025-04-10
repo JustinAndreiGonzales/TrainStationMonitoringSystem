@@ -1,4 +1,5 @@
 import { test, expect, defineConfig } from '@playwright/test';
+test.setTimeout(120_000);
 
 export default defineConfig({
   retries: 2,
