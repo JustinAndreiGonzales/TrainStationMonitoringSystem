@@ -9,7 +9,7 @@
   let selectedStation = "";
   let selectedHref = "";
   
-  $: trainLines = [...new Set(allStations.map((station) => station.trainLine))];
+  $: trainLines = [...new Set(allStations.map((station) => station.trainLine))].sort();
 
   $: stations = selectedTrainLine
     ? allStations.filter((station) => station.trainLine === selectedTrainLine)

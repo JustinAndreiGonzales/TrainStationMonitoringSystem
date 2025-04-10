@@ -109,6 +109,7 @@ const stops = (num) => {
   {:then route}
     <div class="scale-80 sm:scale-100 md:scale-100 origin-top mt-6 space-y-5 flex flex-col justify-center items-center">
       <h1 class="text-center inter-h1 text-3xl">Routes - {findStation(Number(start)).stationName} to {findStation(Number(end)).stationName}</h1>
+      
       <div class="flex flex-col justify-center items-center mr-4">
         <div class="flex flex-col space-y-1">
           {#each route.path as subpath, i}

@@ -7,11 +7,25 @@
   export let filters = [];
   export let deleted = false;
   export let result = '';
+  export let readyToDel = false;
+  export let openToDel = false;
+
+  let resolver;
+  $: if (readyToDel && resolver) {
+    resolver();
+    resolver = null;
+  }
 
   $: current = current;
   $: filteredPosts = filters.length ? posts.filter(post => post.station.split(',').some(tag => filters.includes(tag))) : posts;
   
   async function deletePost(id) {
+    openToDel = true;
+    await new Promise((resolve) => {
+      if (readyToDel) return resolve; 
+      resolver = resolve;
+    });
+
     if (!deleted) {
       deleted = true;
       const token = localStorage.getItem('jwt_token');

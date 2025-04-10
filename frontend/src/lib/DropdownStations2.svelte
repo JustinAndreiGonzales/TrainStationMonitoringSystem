@@ -11,7 +11,7 @@
   let selectedStation1 = "";
   let selectedStation2 = "";
 
-  $: trainLines = [...new Set(allStations.map((station) => station.trainLine))];
+  $: trainLines = [...new Set(allStations.map((station) => station.trainLine))].sort();
 
   $: stations1 = selectedTrainLine1
     ? allStations.filter((station) => station.trainLine === selectedTrainLine1)
