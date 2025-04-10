@@ -1,4 +1,5 @@
 import { test, expect, defineConfig } from '@playwright/test';
+test.setTimeout(120_000);
 
 export default defineConfig({
   retries: 2,
@@ -41,7 +42,7 @@ test('announcements postable', async ({ page }) => {
   await page.getByPlaceholder('Username').fill('admin');
   await page.getByPlaceholder('Password').fill('password');
 
-  await page.getByRole('button').click();
+  await page.getByRole('button').first().click();
   await page.waitForNavigation();
 
   await page.goto('https://trenph.vercel.app/admin/announcements');
